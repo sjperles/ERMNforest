@@ -1,13 +1,13 @@
 Package: ERMNforest
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Package for importing, joining, querying, and summarizing ERMN forest database tables
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Stephanie Perles, based on Kate Miller's forestNETN package
+Maintainer: Stephanie Perles <stephanie_perles@nps.gov>
+Description: This package contains functions that import database tables from the ERMN forest backend using odbc (must use 32-bit R for import), that join tables together and that filter by park, year, location type and visit type.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/sjperles/ERMNforest
 BugReports: https://github.com/sjperles/ERMNforest/issues
+RoxygenNote: 7.2.1
