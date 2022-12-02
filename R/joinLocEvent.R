@@ -73,8 +73,8 @@ joinLocEvent<-function(park="all", from=2007,to=2019, QAQC=FALSE, rejected=FALSE
 
   loc6<- if (park=='all') {(loc5)
   } else if (park %in% levels(loc5$Unit_Code)){filter(loc5,Unit_Code==park)
-  } else if (park=='WV'){filter(loc5,Unit_Code=="NERI" || Unit_Code=="GARI" || Unit_Code=="BLUE")
-  } else if (park=='WEPA'){filter(loc5,Unit_Code=="ALPO" || Unit_Code=="JOFL" || Unit_Code=="FONE" || Unit_Code=="FRHI")
+ # } else if (park=='WV'){filter(loc5,Unit_Code=="NERI" || Unit_Code=="GARI" || Unit_Code=="BLUE")
+# } else if (park=='WEPA'){filter(loc5,Unit_Code=="ALPO" || Unit_Code=="JOFL" || Unit_Code=="FONE" || Unit_Code=="FRHI")
   } else {stop("park must be one of the factor levels of Unit_Code")}
 
   park.ev1<-merge(loc6,event,by="Location_ID",all.x=T)
