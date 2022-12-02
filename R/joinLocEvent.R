@@ -72,24 +72,24 @@ joinLocEvent<-function(park="all", from=2007,to=2022, QAQC=FALSE, rejected=FALSE
   } else if (QAQC==TRUE) {(loc4)
   } else {stop("QAQC must be TRUE or FALSE")}
 
-  loc6<- if (anrevisit==FALSE) {filter(loc5, Panel != "X")
-  } else if (anrevisit==TRUE) {(loc5)
-  } else {stop("QAQC must be TRUE or FALSE")}
-
-  loc7<- if (park=='all') {(loc6)
-  } else if (park %in% levels(loc6$Unit_Code)){filter(loc6,Unit_Code==park)
-  } else if (park=='WV'){filter(loc6,Unit_Code=="NERI" || Unit_Code=="GARI" || Unit_Code=="BLUE")
-  } else if (park=='WEPA'){filter(loc6,Unit_Code=="ALPO" || Unit_Code=="JOFL" || Unit_Code=="FONE" || Unit_Code=="FRHI")
+  loc6<- if (park=='all') {(loc5)
+  } else if (park %in% levels(loc5$Unit_Code)){filter(loc5,Unit_Code==park)
+  } else if (park=='WV'){filter(loc5,Unit_Code=="NERI" || Unit_Code=="GARI" || Unit_Code=="BLUE")
+  } else if (park=='WEPA'){filter(loc5,Unit_Code=="ALPO" || Unit_Code=="JOFL" || Unit_Code=="FONE" || Unit_Code=="FRHI")
   } else {stop("park must be one of the factor levels of Unit_Code")}
 
-  park.ev1<-merge(loc7,event,by="Location_ID",all.x=T)
+  park.ev1<-merge(loc6,event,by="Location_ID",all.x=T)
   park.ev2<-park.ev1[which(complete.cases(park.ev1)),]
 
-  park.ev3<- park.ev2 %>% filter(Panel %in% panels) %>% droplevels()
+  park.ev3<- if (anrevisit==FALSE) {filter(park.ev2, Panel != "X")
+  } else if (anrevisit==TRUE) {(park.ev2)
+  } else {stop("QAQC must be TRUE or FALSE")}
 
-  park.plots<- if (output=='short') {park.ev3 %>% select(Location_ID,Event_ID,Unit_Code,
+  park.ev4<- park.ev3 %>% filter(Panel %in% panels) %>% droplevels()
+
+  park.plots<- if (output=='short') {park.ev4 %>% select(Location_ID,Event_ID,Unit_Code,
     Plot_Name, Plot_Number, X_Coord, Y_Coord, Panel, Year, Event_QAQC, Cycle)
-  } else if (output=='verbose') {park.ev3}
+  } else if (output=='verbose') {park.ev4}
 
   return(data.frame(park.plots))
 } # end of function
