@@ -33,15 +33,15 @@
 #' \item{FALSE}{Default. Only returns plots that were sampled on 4 year cycle, does not include annual revisits.}
 #' \item{TRUE}{returns all records}}
 #' }
-#' @param panels Allows you to select individual panels from 1 to 4. Default is all 4 panels (1:4).
-#' If more than one panel is selected, specify by c(1,3), for example.
+#' @param years Allows you to select individual years from 2007 to 2022. Default is all years.
+#' If more than one year is selected, specify by c(2007,2018), for example.
 #'
 #' @return returns a dataframe with location and visit events
 #'
 #' @examples
 #' importCSV('./forest_csvs')
 #' # Select most recent survey of data from DEWA
-#' DEWA_data <- joinLocEvent(park = 'DEWA', panels = c(1,3))
+#' DEWA_data <- joinLocEvent(park = 'DEWA', years = c(2007,2018))
 #'
 #
 #'
@@ -52,7 +52,7 @@
 # Joins tbl_Locations and tbl_Events tables and filters by park, year, and plot/visit type
 #------------------------
 joinLocEvent<-function(park="all", QAQC=FALSE, rejected=FALSE, anrevisit=FALSE,
-                       panels=1:4, output='short', ...){
+                       years=2007:2022, output='short', ...){
 
   loc2<-loc %>% mutate(Unit_Code=as.factor(str_sub(Unit_Code,1,4)))
   loc3<-droplevels(loc2[,c("Location_ID","Unit_Code","X_Coord","Y_Coord","Plot_Number","Status")])
@@ -79,7 +79,7 @@ joinLocEvent<-function(park="all", QAQC=FALSE, rejected=FALSE, anrevisit=FALSE,
   } else if (anrevisit==TRUE) {(park.ev1)
   } else {stop("QAQC must be TRUE or FALSE")}
 
-  park.ev4<- park.ev3 %>% filter(Panel %in% panels) %>% droplevels()
+  park.ev4<- park.ev3 %>% filter(Year %in% years) %>% droplevels()
 
   park.plots<- if (output=='short') {park.ev4 %>% select(Location_ID,Event_ID,Unit_Code,
     Plot_Name, Plot_Number, X_Coord, Y_Coord, Panel, Year, Event_QAQC, Cycle)
