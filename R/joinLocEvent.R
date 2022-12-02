@@ -58,7 +58,7 @@
 joinLocEvent<-function(park="all", from=2007,to=2019, QAQC=FALSE, rejected=FALSE, anrevisit=FALSE,
                        panels=1:4, output='short', ...){
 
-  loc2<-loc %>% mutate(Unit_Code=as.factor("Unit_Code"))
+  loc2<-loc %>% mutate(Unit_Code=as.factor(str_sub(Unit_Code,1,4)))
   loc3<-droplevels(loc2[,c("Location_ID","Unit_Code","X_Coord","Y_Coord","Plot_Number","Status")])
   loc3$Plot_Number<-str_pad(loc3$Plot_Number,width=3,side="left",pad=0) #Pad plot number so retains 3-digits
   loc3$Plot_Name<-paste(loc3$Unit_Code, loc3$Plot_Number, sep="-")
