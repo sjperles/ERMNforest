@@ -42,7 +42,7 @@
 #'
 #' @examples
 #' importCSV('./forest_csvs')
-#' # Select most recent survey of data from WEFA
+#' # Select most recent survey of data from DEWA
 #' DEWA_data <- joinLocEvent(park = 'DEWA', panels = c(1,3), from = 2007, to = 2018)
 #'
 #' # Select data from cycle 3
@@ -78,10 +78,9 @@ joinLocEvent<-function(park="all", from=2007,to=2019, QAQC=FALSE, rejected=FALSE
   } else {stop("park must be one of the factor levels of Unit_Code")}
 
   park.ev1<-merge(loc6,event,by="Location_ID",all.x=T)
-  park.ev2<-park.ev1[which(complete.cases(park.ev1)),]
 
-  park.ev3<- if (anrevisit==FALSE) {filter(park.ev2, Panel != "X")
-  } else if (anrevisit==TRUE) {(park.ev2)
+  park.ev3<- if (anrevisit==FALSE) {filter(park.ev1, Panel != "X")
+  } else if (anrevisit==TRUE) {(park.ev1)
   } else {stop("QAQC must be TRUE or FALSE")}
 
   park.ev4<- park.ev3 %>% filter(Panel %in% panels) %>% droplevels()
