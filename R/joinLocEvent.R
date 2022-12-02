@@ -20,8 +20,6 @@
 #' \item{"JOFL"}{Johnstown Flood NM only}
 #' \item{"WEPA"}{ALPO, JOFL, FONE, and FRHI only}
 #' \item{"DEWA"}{Delaware Water Gap NRA only}}
-#' @param from Year to start analysis, ranging from 2007-2022
-#' @param to Year to stop analysis, ranging from 2002-2022
 #' @param QAQC Allows you to remove or include QAQC events.
 #' \describe{
 #' \item{FALSE}{Default. Only returns visits that are not QAQC visits}
@@ -43,11 +41,9 @@
 #' @examples
 #' importCSV('./forest_csvs')
 #' # Select most recent survey of data from DEWA
-#' DEWA_data <- joinLocEvent(park = 'DEWA', panels = c(1,3), from = 2007, to = 2018)
+#' DEWA_data <- joinLocEvent(park = 'DEWA', panels = c(1,3))
 #'
-#' # Select data from cycle 3
-#' cycle3 <- joinLocEvent(from = 2015, to = 2018) # all parks is default
-#'
+#
 #'
 #' @export
 #'
@@ -55,7 +51,7 @@
 #------------------------
 # Joins tbl_Locations and tbl_Events tables and filters by park, year, and plot/visit type
 #------------------------
-joinLocEvent<-function(park="all", from=2007,to=2019, QAQC=FALSE, rejected=FALSE, anrevisit=FALSE,
+joinLocEvent<-function(park="all", QAQC=FALSE, rejected=FALSE, anrevisit=FALSE,
                        panels=1:4, output='short', ...){
 
   loc2<-loc %>% mutate(Unit_Code=as.factor(str_sub(Unit_Code,1,4)))
@@ -74,7 +70,7 @@ joinLocEvent<-function(park="all", from=2007,to=2019, QAQC=FALSE, rejected=FALSE
   loc6<- if (park=='all') {(loc5)
   } else if (park %in% levels(loc5$Unit_Code)){filter(loc5,Unit_Code==park)
   } else if (park=='WV'){filter(loc5,Unit_Code=="NERI" | Unit_Code=="GARI" | Unit_Code=="BLUE")
- } else if (park=='WEPA'){filter(loc5,Unit_Code=="ALPO" | Unit_Code=="JOFL" | Unit_Code=="FONE" | Unit_Code=="FRHI")
+  } else if (park=='WEPA'){filter(loc5,Unit_Code=="ALPO" | Unit_Code=="JOFL" | Unit_Code=="FONE" | Unit_Code=="FRHI")
   } else {stop("park must be one of the factor levels of Unit_Code")}
 
   park.ev1<-merge(loc6,event,by="Location_ID",all.x=T)
