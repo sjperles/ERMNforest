@@ -55,22 +55,21 @@
 #------------------------
 # Joins tbl_Locations and tbl_Events tables and filters by park, year, and plot/visit type
 #------------------------
-joinLocEvent<-function(park="all", from=2007,to=2022, QAQC=FALSE, rejected=FALSE, anrevisit=FALSE,
+joinLocEvent<-function(park="all", from=2007,to=2019, QAQC=FALSE, rejected=FALSE, anrevisit=FALSE,
                        panels=1:4, output='short', ...){
 
-  loc2<-merge(parktbl,loc,by="Unit_Code",all.y=T)
+  loc2<-loc %>% mutate(Unit_Code=as.factor("Unit_Code"))
   loc3<-droplevels(loc2[,c("Location_ID","Unit_Code","X_Coord","Y_Coord","Plot_Number","Status")])
   loc3$Plot_Number<-str_pad(loc3$Plot_Number,width=3,side="left",pad=0) #Pad plot number so retains 3-digits
   loc3$Plot_Name<-paste(loc3$Unit_Code, loc3$Plot_Number, sep="-")
 
-
-  loc4<- if (rejected==FALSE) {filter(loc3, Status == "Active")
-  } else if (rejected==TRUE) {(loc3)
-  } else {stop("rejected must be TRUE or FALSE")}
-
-  loc5<- if (QAQC==FALSE) {filter(loc4, Unit_Code != "TEST")
-  } else if (QAQC==TRUE) {(loc4)
+  loc4<- if (QAQC==FALSE) {filter(loc3, Unit_Code != "TEST")
+  } else if (QAQC==TRUE) {(loc3)
   } else {stop("QAQC must be TRUE or FALSE")}
+
+  loc5<- if (rejected==FALSE) {filter(loc4, Status == "Active")
+  } else if (rejected==TRUE) {(loc4)
+  } else {stop("rejected must be TRUE or FALSE")}
 
   loc6<- if (park=='all') {(loc5)
   } else if (park %in% levels(loc5$Unit_Code)){filter(loc5,Unit_Code==park)
