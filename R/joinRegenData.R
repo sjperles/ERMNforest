@@ -11,7 +11,7 @@
 #' \describe{
 #' \item{"all"}{Default. Returns all species.}
 #' \item{"native"}{Returns native species only}
-#' \item{"exotic"}{Returns exotic species only}
+#' \item{"exotic"}{Returns exotic species only, must select canopyForm='all'}
 #' }
 #' @param canopyForm Allows you to filter on only canopy-forming species or include all species.
 #' \describe{
@@ -93,12 +93,12 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic'), canopyForm=c('c
                                                   if_else(Nativity3 == "maybe native", "native",Nativity3)))
 
 
-  regen8<-if(canopyForm=='canopy'){filter(regen7, Canopy=="TRUE")
+  regen8<-if(canopyForm=='canopy'){filter(regen7, Canopy==TRUE)
   } else if(canopyForm=='all'){(regen7)
   }
 
-  regen9<- if (speciesType=='native'){filter(regen8,Nativity=="native")
-  } else if (speciesType=='exotic'){filter(regen8,Nativity=="exotic")
+  regen9<- if (speciesType=='native') {filter(regen8, Nativity == "native")
+  } else if (speciesType=='exotic') {filter(regen8, Nativity == "exotic")
   } else if (speciesType=='all'){(regen8)
   }
 
@@ -162,7 +162,7 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic'), canopyForm=c('c
   } else if (units=='micro'){regen13
   }
 
-  regen13<-regen13 %>% arrange(Plot_Name,Year)
+  regen14<-regen14 %>% arrange(Plot_Name,Year)
   return(data.frame(regen13))
 } # end of function
 
