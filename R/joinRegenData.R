@@ -70,6 +70,8 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic'), canopyForm=c('c
                 by=c("Event_ID","Plant_ID", "Microplot_ID"),all.x=T,all.y=T)
   regen1[,4:10][is.na(regen1[,4:10])]<-0
 
+  park.plots<-force(joinLocEvent(park=park, from=from,to=to,QAQC=QAQC,locType=locType,panels=panels,output='short'))
+
   regen2<-merge(park.plots,regen1,by='Event_ID', all.x=T,all.y=F)
 
   regen3<-merge(regen2,plants[,c("Plant_ID","Latin_name","Common","Canopy","PA_Glac_Nativ",
@@ -107,8 +109,8 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic'), canopyForm=c('c
   regen10 <- regen9 %>% mutate (total = (seedht0+seedht1+seedht2+seedht3+seedht4),
                                 totU15 = (seedht1+seedht2+seedht3+seedht4),
                                 totU30 = (seedht2+seedht3+seedht4),
-                                stock5u = (seedht0+seedht1+seedht2*2+seedht3*20+seedht4*50+sap.stems*50),
-                                stock15u = (seedht1+seedht2*2+seedht3*20+seedht4*50+sap.stems*50))
+                                stock5u = (seedht0+seedht1+(seedht2*2)+(seedht3*20)+(seedht4*50)+(sap.stems*50)),
+                                stock15u = (seedht1+(seedht2*2)+(seedht3*20)+(seedht4*50)+(sap.stems*50)))
 
   regen11 <- regen10 %>% group_by(Event_ID,Unit_Code,Plot_Name,Cycle,Year) %>% summarise (plot.total = sum(total),
                                                                                           plot.U15 = sum(totU15),
