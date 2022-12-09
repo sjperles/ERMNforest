@@ -163,6 +163,6 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic'), canopyForm=c('c
   }
 
   regen14<-regen14 %>% arrange(Plot_Name,Year)
-  return(data.frame(regen13))
+  return(data.frame(regen14))
 } # end of function
 
