@@ -48,6 +48,9 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic'), canopyForm=c('c
   canopyForm<-match.arg(canopyForm)
   units<-match.arg(units)
 
+  park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,rejected = rejected,
+                                 anrevisit = anrevisit, output = 'short'))
+
 # Prepare the seedling data
   seed1 <- merge(micro,sdlg, by="Microplot_Characterization_Data_ID",all.y=T,all.x=T)
   seed <- mutate(seed1,seedht0=Num_Seedlings_5_15cm,
@@ -69,8 +72,6 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic'), canopyForm=c('c
                 sap[,c("Event_ID","Plant_ID","Microplot_ID","sap.stems","tot.sap.ba.cm2")],
                 by=c("Event_ID","Plant_ID", "Microplot_ID"),all.x=T,all.y=T)
   regen1[,4:10][is.na(regen1[,4:10])]<-0
-
-  park.plots<-force(joinLocEvent(park=park, from=from,to=to,QAQC=QAQC,locType=locType,panels=panels,output='short'))
 
   regen2<-merge(park.plots,regen1,by='Event_ID', all.x=T,all.y=F)
 
