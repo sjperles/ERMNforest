@@ -76,8 +76,13 @@ joinMicroShrubData<-function(speciesType = c('all', 'native','exotic'), park='al
   shrub9 <- shrub8 %>% mutate (Nativity = if_else(Nativity3 == "maybe exotic","exotic",
                                                   if_else(Nativity3 == "maybe native", "native",Nativity3)))
 
+  shrub10 <- if (speciesType=='native'){filter(shrub9,Nativity == "native")
+  } else if (speciesType=='exotic'){filter(shrub9,Nativity == "exotic")
+  } else if (speciesType=='all'){(shrub9)
+  }
+
   #Summarize by plot and nativity
-  shrub10 <- shrub9 %>% group_by(Event_ID,Nativity) %>%
+  shrub11 <- shrub10 %>% group_by(Event_ID,Nativity) %>%
     summarise(m.freq = sum(present), tot.cover = sum(cover))
 
   # Determine number of microplots sampled at each event
@@ -90,18 +95,13 @@ joinMicroShrubData<-function(speciesType = c('all', 'native','exotic'), park='al
 
 
   # Merge selected data with micro.samp
-  shrub11 <- merge(micro.samp,shrub10,by="Event_ID",all.x=T, all.y=T)
-  shrub12 <- shrub11 %>% mutate(ave.sp.rich = (m.freq/MSamp),
+  shrub12 <- merge(micro.samp,shrub11,by="Event_ID",all.x=T, all.y=T)
+  shrub12[,8:9][is.na(shrub12[,8:9])]<-0
+  shrub13 <- shrub12 %>% mutate(ave.sp.rich = (m.freq/MSamp),
                                 ave.cover = (tot.cover/MSamp))
 
-  shrub13 <- if (speciesType=='native'){filter(shrub12,Nativity == "native")
-  } else if (speciesType=='exotic'){filter(shrub12,Nativity == "exotic")
-  } else if (speciesType=='all'){(shrub12)
-  }
+  shrub13 <- shrub13 %>% arrange(Plot_Name, Year)
 
-  shrub13[,8:11][is.na(shrub12[,8:11])]<-0
-  shrub12 <- shrub12 %>% arrange(Plot_Name, Year)
-
-  return(data.frame(shrub12))
+  return(data.frame(shrub13))
 } # end of function
 
