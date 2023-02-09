@@ -88,7 +88,7 @@ importData<- function(type=c('DSN','file'), odbc='ERMNVeg', path=NA,
   setTxtProgressBar(pb,4)
   assign("trees", DBI::dbReadTable(db, "tbl_Trees"),envir=.GlobalEnv)
   setTxtProgressBar(pb,5)
-  assign("treecond",DBI::dbReadTable(db,"tlu_Tree_Conditions"),envir=.GlobalEnv)
+  assign("treecond",DBI::dbReadTable(db,"tbl_Tree_Data_Tree_Conditions"),envir=.GlobalEnv)
   setTxtProgressBar(pb,6)
   assign("treefcond",DBI::dbReadTable(db,"tbl_Tree_Data_Foliage_Conditions"),envir=.GlobalEnv)
   setTxtProgressBar(pb,7)
