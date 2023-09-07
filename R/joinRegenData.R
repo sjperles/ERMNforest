@@ -30,7 +30,7 @@
 #'
 #' @examples
 #' # compile seedling and sapling data for all parks and all species in most recent cycle
-#' regen_data <- joinRegenData(canopyForm = 'all', years = c(2007,2018))
+#' regen_data <- joinRegenData(canopyForm = 'all', years = c(2017:2022))
 #'
 #' # compile regen data for only canopy-forming (default) and native species in FONE for all years
 #' FONE_regen <- joinRegenData(park = 'FONE', speciesType = 'native')
@@ -42,7 +42,7 @@
 # Joins microplot tables and filters by park, year, and plot/visit type
 #------------------------
 joinRegenData<-function(speciesType=c('all', 'native','exotic'), canopyForm=c('canopy','all'),
-  units=c('micro','ha','acres'), park='all',years=2007:2022, QAQC=FALSE, rejected=FALSE, anrevisit=FALSE, output, ...){
+  units=c('micro','ha','acres'), park='all',years=2007:2023, QAQC=FALSE, rejected=FALSE, anrevisit=FALSE, output, ...){
 
   speciesType<-match.arg(speciesType)
   canopyForm<-match.arg(canopyForm)

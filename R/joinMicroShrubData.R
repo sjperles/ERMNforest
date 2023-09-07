@@ -29,7 +29,7 @@
 # Joins microplot tables and filters by park, year, and plot/visit type
 #------------------------
 joinMicroShrubData<-function(speciesType = c('all', 'native','exotic'), park='all',
-                             years=2007:2022, QAQC=FALSE, rejected=FALSE, anrevisit=FALSE, output, ...){
+                             years=2007:2023, QAQC=FALSE, rejected=FALSE, anrevisit=FALSE, output, ...){
 
   speciesType<-match.arg(speciesType)
 
