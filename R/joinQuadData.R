@@ -114,14 +114,6 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'invasive'),
                                                                                     if_else(Graminoid == TRUE, "gram",
                                                                                             if_else(Fern == TRUE, "fern","Unknown")))))))
 
-  # Calculate plot-level species richness from quadrats
-  herb8 <- herb3 %>% mutate (plot.cov.tot.bysp = (q0_5_Cover_Class_ID + q0_10_Cover_Class_ID + q60_5_Cover_Class_ID +
-                                                    q60_10_Cover_Class_ID + q120_5_Cover_Class_ID + q120_10_Cover_Class_ID +
-                                                    q180_5_Cover_Class_ID + q180_10_Cover_Class_ID + q240_5_Cover_Class_ID +
-                                                    q240_10_Cover_Class_ID + q300_5_Cover_Class_ID + q300_10_Cover_Class_ID))
-  herb9 <- herb8 %>% mutate (Pres = if_else(plot.cov.tot.bysp>0,1,0))
-  herb10 <- herb9 %>% group_by(Event_ID) %>% summarise(plot.sp.tot = sum(Pres))
-
 
   # Create final file for selecting and summarizing
   park.herb <- merge(park.herb7[,c("Event_ID","Location_ID", "Unit_Code","Plot_Number","Panel","Year",
@@ -147,25 +139,29 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'invasive'),
 
 
   # Summarizing quadrat data
+  plot.herb1 <- subset(park.herb, Pres > 0)
+  plot.herb2 <- plot.herb1 %>% distinct(Event_ID, Latin_name, .keep_all = TRUE)
+  plot.sp.rich <- plot.herb2 %>% group_by (Event_ID) %>% summarise(plot.sp.rich = sum(Pres))
+  # Total species richness in plot from quadrats
+
   herb5 <- park.herb %>% group_by (Event_ID, QuadratID) %>% summarise(q.tot.cov = sum(Cover),
-                                                                      q.sp.rich = sum(Pres),
-                                                                      plot.sp.tot = max(plot.sp.tot)) %>% ungroup()
+                                                                      q.sp.rich = sum(Pres)) %>% ungroup()
   # Total quadrat cover and richness in herb5
 
 
   herb6 <- herb5 %>% group_by (Event_ID) %>% summarise (sum.q.cov = sum(q.tot.cov),
-                                                        sum.q.rich = sum(q.sp.rich),
-                                                        plot.sp.tot = max(plot.sp.tot))
+                                                        sum.q.rich = sum(q.sp.rich))
   herb7 <- merge (herb6, quadsamp4, by="Event_ID", all.y=T)
   herb7$ave.q.cov = (herb7$sum.q.cov/herb7$Quad_Sp_Sample)
   herb7$ave.q.rich = (herb7$sum.q.rich/herb7$Quad_Sp_Sample)
   # Plot-wide Average quadrat cover and richness
 
-  herb7[is.na(herb7)] <- 0
+  herb8 <- merge(herb7, plot.sp.rich, by="Event_ID", all.x=T)
+  herb8[is.na(herb8)] <- 0
 
-  quads.final <- herb7[,c("Location_ID", "Unit_Code", "Plot_Name", "Plot_Number", "X_Coord", "Y_Coord", "Panel",
-                          "Year", "Event_QAQC", "Cycle", "Quad_Sp_Sample", "ave.q.cov", "ave.q.rich",
-                          "sum.q.cov", "sum.q.rich", "plot.sp.tot")] %>% arrange(Plot_Name, Year)
+  quads.final <- herb8[,c("Location_ID", "Unit_Code", "Plot_Name", "Plot_Number", "X_Coord", "Y_Coord", "Panel",
+                          "Year", "Event_ID", "Event_QAQC", "Cycle", "Quad_Sp_Sample", "ave.q.cov", "ave.q.rich",
+                          "sum.q.cov", "sum.q.rich", "plot.sp.rich")] %>% arrange(Plot_Name, Year)
 
   return(data.frame(quads.final))
 
