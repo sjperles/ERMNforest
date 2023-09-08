@@ -38,14 +38,18 @@
 #'
 #------------------------
 # Joins quadrat tables and filters by park, year, and plot/visit type
+# Cannot select data from 2007 since quadrat protocol was different and not compatibile with later years
 #------------------------
 joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'invasive'),
                        GrowthForm=c('all', 'tree', 'shrub', 'herb', 'gram', 'fern', 'vine'),
-                       park='all',years=2007:2023,
+                       park='all',years=2008:2023,
                        QAQC=FALSE, rejected=FALSE, anrevisit=FALSE, output, ...){
 
   speciesType<-match.arg(speciesType)
   GrowthForm<-match.arg(GrowthForm)
+
+  park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,rejected = rejected,
+                                 anrevisit = anrevisit, output = 'short'))
 
 
   # Creates number of quadrats sampled per event
@@ -152,12 +156,14 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'invasive'),
   herb6 <- herb5 %>% group_by (Event_ID) %>% summarise (sum.q.cov = sum(q.tot.cov),
                                                         sum.q.rich = sum(q.sp.rich),
                                                         plot.sp.tot = max(plot.sp.tot))
-  herb7 <- merge (herb6, quadsamp3, by="Event_ID", all.y=T)
+  herb7 <- merge (herb6, quadsamp4, by="Event_ID", all.y=T)
   herb7$ave.q.cov = (herb7$sum.q.cov/herb7$Quad_Sp_Sample)
   herb7$ave.q.rich = (herb7$sum.q.rich/herb7$Quad_Sp_Sample)
   # Plot-wide Average quadrat cover and richness
 
-  quads.final <- herb7 %>% arrange(Plot_Name, Year)
+  quads.final <- herb7[,c("Location_ID", "Unit_Code", "Plot_Name", "Plot_Number", "X_Coord", "Y_Coord", "Panel",
+                          "Year", "Event_QAQC", "Cycle", "Quad_Sp_Sample", "ave.q.cov", "ave.q.rich",
+                          "sum.q.cov", "sum.q.rich", "plot.sp.tot")] %>% arrange(Plot_Name, Year)
 
   return(data.frame(quads.final))
 
