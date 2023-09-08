@@ -161,6 +161,8 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'invasive'),
   herb7$ave.q.rich = (herb7$sum.q.rich/herb7$Quad_Sp_Sample)
   # Plot-wide Average quadrat cover and richness
 
+  herb7[is.na(herb7)] <- 0
+
   quads.final <- herb7[,c("Location_ID", "Unit_Code", "Plot_Name", "Plot_Number", "X_Coord", "Y_Coord", "Panel",
                           "Year", "Event_QAQC", "Cycle", "Quad_Sp_Sample", "ave.q.cov", "ave.q.rich",
                           "sum.q.cov", "sum.q.rich", "plot.sp.tot")] %>% arrange(Plot_Name, Year)
