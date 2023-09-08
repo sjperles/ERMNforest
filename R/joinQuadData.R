@@ -12,6 +12,16 @@
 #' \item{"native"}{Returns native species only}
 #' \item{"exotic"}{Returns exotic species only}
 #' \item{"invasive"}{Returns species on the Indicator Invasive List}
+#'
+#' @param GrowthForm Allows you to filter by tree, shrub, herb, fern, graminoid, vine, or include all species.
+#' \describe{
+#' \item{"all"}{Default. Returns all species.}
+#' \item{"tree"}{Returns tree species only}
+#' \item{"shrub"}{Returns shrub species only}
+#' \item{"herb"}{Returns herbaceous species only}
+#' \item{"gram"}{Returns graminoid species only}
+#' \item{"fern"}{Returns fern species only}
+#' \item{"vine"}{Returns vine species only}
 #' }
 #'
 #' @return Returns a dataframe with cover class midpoints for each quadrat and includes guild for each species.
@@ -29,10 +39,14 @@
 #------------------------
 # Joins quadrat tables and filters by park, year, and plot/visit type
 #------------------------
-joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'invasive'), park='all',years=2007:2023,
+joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'invasive'),
+                       GrowthForm=c('Tree', 'shrub', 'herb', 'gram', 'fern', 'vine'),
+                       park='all',years=2007:2023,
                        QAQC=FALSE, rejected=FALSE, anrevisit=FALSE, output, ...){
 
   speciesType<-match.arg(speciesType)
+  GrowthForm<-match.arg(GrowthForm)
+
 
   # Creates number of quadrats sampled per event
   quadsamp<-quadchr[,c(1,2,3,18)]
@@ -40,7 +54,7 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'invasive'), par
   quadsamp3<-merge(park.plots,quadsamp2, by="Event_ID", all.x=T)
   quadsamp4 <- subset(quadsamp3, Quad_Sp_Sample>0)
 
-  # Summarize quadrat data
+  # Format quadrat data
   herb1 <- quads
   herb1[,4:15][herb1[,4:15]==1] <-0.1 # convert cover classes to midpoints for all 12 quadrats
   herb1[,4:15][herb1[,4:15]==2] <-1.5
@@ -68,12 +82,7 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'invasive'), par
   park.herb1<-merge(park.plots,herb11, by="Event_ID", all.y=T)
   park.herb2<-subset(park.herb1,!is.na(Unit_Code))
 
-  # This looks at which species in DEWA have different nativity between NJ Piedmont and PA Glaciated Plateau
-  unique.herblist<-park.herb2 %>% distinct(Unit_Code, Latin_name, .keep_all = TRUE)
-  herb11X.DEWA <- unique.herblist %>% filter(Unit_Code == "DEWA") %>%
-    mutate (diff.DEWA = if_else(NJ_Pd_Nativ ==PA_Glac_Nativ,0,1))
-
-  # Create nativity by park based on ecoregion. DEWA using PA Glaciated by default (check species identified above)
+  # Create nativity by park based on ecoregion. DEWA using PA Glaciated by default
   park.herb3 <- park.herb2 %>% mutate (Nativity1 = if_else(Unit_Code == "DEWA",PA_Glac_Nativ,
                                                            if_else(Unit_Code == "ALPO",PA_Mt_Nativ,
                                                                    if_else(Unit_Code == "JOFL",PA_Mt_Nativ,
@@ -90,80 +99,65 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'invasive'), par
   park.herb5 <- park.herb4 %>% mutate (Nativity4 = if_else(Nativity3 == "maybe exotic","exotic",
                                                           if_else(Nativity3 == "maybe native", "native",Nativity3)))
 
-  park.herb6 <- park.herb5 %>% mutate (Nativity = if_else(Invasive == TRUE, "invsasive",Nativity4))
+  park.herb6 <- park.herb5 %>% mutate (Nativity = if_else(Invasive == TRUE, "invasive",Nativity4))
 
-  park.herb7 <- park.herb6[,c("Event_ID","Location_ID", "Unit_Code","Plot_Number","Panel","Year",
-                              "Plot_Name", "Plant_ID", "QuadratID", "Cover", "Pres", "Latin_name", "Nativity")]
+  # Create single column for growth form
+  park.herb7 <- park.herb6 %>% mutate (GrowthForm = if_else(Tree == TRUE,"tree",
+                                                            if_else(Shrub == TRUE,"shrub",
+                                                                    if_else(Herbaceous == TRUE, "herb",
+                                                                            if_else(Vine == TRUE, "vine",
+                                                                                    if_else(Graminoid == TRUE, "gram",
+                                                                                            if_else(Fern == TRUE, "fern","Unknown")))))))
+
+  # Calculate plot-level species richness from quadrats
+  herb8 <- herb3 %>% mutate (plot.cov.tot.bysp = (q0_5_Cover_Class_ID + q0_10_Cover_Class_ID + q60_5_Cover_Class_ID +
+                                                    q60_10_Cover_Class_ID + q120_5_Cover_Class_ID + q120_10_Cover_Class_ID +
+                                                    q180_5_Cover_Class_ID + q180_10_Cover_Class_ID + q240_5_Cover_Class_ID +
+                                                    q240_10_Cover_Class_ID + q300_5_Cover_Class_ID + q300_10_Cover_Class_ID))
+  herb9 <- herb8 %>% mutate (Pres = if_else(plot.cov.tot.bysp>0,1,0))
+  herb10 <- herb9 %>% group_by(Event_ID) %>% summarise(plot.sp.tot = sum(Pres))
 
 
+  # Create final file for selecting and summarizing
+  park.herb <- merge(park.herb7[,c("Event_ID","Location_ID", "Unit_Code","Plot_Number","Panel","Year",
+                                   "Plot_Name", "Plant_ID", "QuadratID", "Cover", "Pres", "Latin_name", "Nativity","Invasive","GrowthForm")],
+                     herb10, by="Event_ID",all.x=T)
 
 
-
-
-  quadspp<-merge(quads[,c("Event_ID","TSN","Germinant","qUC_Cover_Class_ID","qUL_Cover_Class_ID",
-    "qML_Cover_Class_ID", "qBL_Cover_Class_ID","qBC_Cover_Class_ID","qBR_Cover_Class_ID",
-    "qMR_Cover_Class_ID","qUR_Cover_Class_ID")],
-    plants[,c("TSN","Latin_Name","Tree","Shrub","Vine","Herbaceous","Graminoid","Fern_Ally",
-      "Exotic","Indicator_Invasive_NETN")],
-    by="TSN",all.x=T)
-  quads2<-merge(quads1,quadspp,by="Event_ID",all.x=T) #%>% filter(Germinant==0) %>% select(-Germinant)
-
-#names(quads2)
-
-  # Convert coverclasses to midpoints for all 8 quadrats
-  quads2[,15:22][quads2[,15:22]==1]<-0.1
-  quads2[,15:22][quads2[,15:22]==2]<-1.5
-  quads2[,15:22][quads2[,15:22]==3]<-3.5
-  quads2[,15:22][quads2[,15:22]==4]<-7.5
-  quads2[,15:22][quads2[,15:22]==5]<-17.5
-  quads2[,15:22][quads2[,15:22]==6]<-37.5
-  quads2[,15:22][quads2[,15:22]==7]<-62.5
-  quads2[,15:22][quads2[,15:22]==8]<-85
-  quads2[,15:22][quads2[,15:22]==9]<-97.5
-
-  old.names<-names(quads2[,15:22])
-  new.names<-c('UC','UL','ML','BL','BC','BR','MR','UR')
-  quads2<-quads2 %>% rename_at(vars(old.names),~new.names)
-  quads2[,c(15:22)][is.na(quads2[,c(15:22)])]<-0
-
-  quads3<-quads2 %>% mutate(avg.cover=(UC+UL+ML+BL+BC+BR+MR+UR)/numHerbPlots)
-  quads3[,c(15:22)][quads3[,c(15:22)]>0]<-1
-  quads3<-quads3 %>% mutate(avg.freq=(UC+UL+ML+BL+BC+BR+MR+UR)/numHerbPlots)
-
-  quads4<-if (speciesType=='native'){filter(quads3,Exotic==FALSE)
-  } else if (speciesType=='exotic'){filter(quads3,Exotic==TRUE)
-  } else if (speciesType=='invasive'){filter(quads3,Indicator_Invasive_NETN==TRUE)
-  } else if (speciesType=='all'){(quads3)
+  # Summarize quadrat data
+  park.herb<-if (speciesType=='native'){filter(park.herb,Nativity=="native")
+  } else if (speciesType=='exotic'){filter(park.herb,Nativity=="exotic")
+  } else if (speciesType=='invasive'){filter(park.herb,Invasive==TRUE)
+  } else if (speciesType=='all'){(park.herb)
   }
 
-  quads5<-merge(quads1,quads4[,c(1,13:33)],by='Event_ID',all.x=T)
-  quads5[,c(15:22, 24:33)][is.na(quads5[,c(15:22, 24:33)])]<-0
-  quads5<-quads5 %>% mutate(germ.cover=ifelse(Germinant==1,avg.cover,0), germ.freq=ifelse(Germinant==1,avg.freq,0),
-                            avg.cover=ifelse(Germinant==0,avg.cover,0), avg.freq=ifelse(Germinant==0,avg.freq,0))
+  park.herb<-if (GrowthForm=='tree'){filter(park.herb,GrowthForm=="tree")
+  } else if (GrowthForm=='shrub'){filter(park.herb,GrowthForm=="shrub")
+  } else if (GrowthForm=='herb'){filter(park.herb,GrowthForm=="herb")
+  } else if (GrowthForm=='gram'){filter(park.herb,GrowthForm=="gram")
+  } else if (GrowthForm=='vine'){filter(park.herb,GrowthForm=="vine")
+  } else if (GrowthForm=='fern'){filter(park.herb,GrowthForm=="fern")
+  } else if (GrowthForm=='all'){(park.herb)
+  }
 
-  quads5.nongerm<-quads5 %>% filter(Germinant==0) %>% select(-(germ.cover:germ.freq)) %>% droplevels()
-  quads5.germ<-quads5 %>% filter(Germinant==1) %>% select(-(avg.cover:avg.freq)) %>% droplevels()
 
-  quads6<-merge(quads1,quads5.nongerm[,c(1,13,15:22,32,33)], by="Event_ID",all.x=T)
-  quads7<-merge(quads1,quads5.germ[,c(1,13:22,32,33)], by=c("Event_ID"), all.x=T,all.y=T)
-  quads8<-merge(quads6,quads7,by=c("Event_ID","Location_ID","Unit_Code","Plot_Name",
-    "Plot_Number","X_Coord","Y_Coord","Panel","Year","Event_QAQC","cycle", "TSN"), all.x=T,all.y=T)
+  # Summarizing quadrat data
+  herb5 <- park.herb %>% group_by (Event_ID, QuadratID) %>% summarise(q.tot.cov = sum(Cover),
+                                                                      q.sp.rich = sum(Pres),
+                                                                      plot.sp.tot = max(plot.sp.tot)) %>% ungroup()
+  # Total quadrat cover and richness in herb5
 
-  quads8[,c(14:35)][is.na(quads8[,c(14:35)])]<-0
 
-  quads9<-quads8 %>% mutate(numHerbPlots=ifelse(numHerbPlots.x>0,numHerbPlots.x,numHerbPlots.y),
-                            UC=ifelse((UC.x+UC.y)>0,1,0), UR=ifelse((UR.x+UR.y)>0,1,0),
-                            MR=ifelse((MR.x+MR.y)>0,1,0), BR=ifelse((BR.x+BR.y)>0,1,0),
-                            BC=ifelse((BC.x+BC.y)>0,1,0), BL=ifelse((BL.x+BL.y)>0,1,0),
-                            ML=ifelse((ML.x+ML.y)>0,1,0), UL=ifelse((UL.x+UL.y)>0,1,0)) %>%
-    select(-(UC.x:UR.x),-(UC.y:UR.y),-numHerbPlots.x,-numHerbPlots.y,-Germinant)
+  herb6 <- herb5 %>% group_by (Event_ID) %>% summarise (sum.q.cov = sum(q.tot.cov),
+                                                        sum.q.rich = sum(q.sp.rich),
+                                                        plot.sp.tot = max(plot.sp.tot))
+  herb7 <- merge (herb6, quadsamp3, by="Event_ID", all.y=T)
+  herb7$ave.q.cov = (herb7$sum.q.cov/herb7$Quad_Sp_Sample)
+  herb7$ave.q.rich = (herb7$sum.q.rich/herb7$Quad_Sp_Sample)
+  # Plot-wide Average quadrat cover and richness
 
-  quads10<-merge(quads9,plants[,c("TSN","Latin_Name","Tree","Shrub","Vine","Herbaceous","Graminoid","Fern_Ally",
-    "Exotic","Indicator_Invasive_NETN")], by="TSN",all.x=T)
+  quads.final <- herb7 %>% arrange(Plot_Name, Year)
 
-  quads10<-quads10 %>% mutate(Latin_Name= ifelse(is.na(Latin_Name), paste0('No species'), paste0(Latin_Name)))
-
-  quads.final<-quads10 %>% select(Location_ID,Event_ID:cycle,numHerbPlots,UC:UL,TSN,Latin_Name,Tree:Indicator_Invasive_NETN,avg.cover:germ.freq)
   return(data.frame(quads.final))
 
   } # end of function
