@@ -57,7 +57,7 @@ joinCWDData<-function(units=c('ha','acres'), park='all',years=2007:2023, QAQC=FA
   cwd5<-if (units=='acres'){
     cwd4 %>% mutate(CWD_Vol=CWD_Vol*35.314667/2.4710538)
     # 35.314667 is the # cubic feet in a cubic meter. 2.4710538 is # acres in 1 hectare.)
-  } else if (units=='ha'){return(cwd5)
+  } else if (units=='ha'){return(cwd4)
   }
 
   cwd6<-merge(park.plots,cwd5[,c("Event_ID","CWD_Vol", "Latin_Name","Decay_Class_ID")],by="Event_ID",all.x=T)
