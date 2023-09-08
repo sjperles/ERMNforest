@@ -40,7 +40,7 @@
 # Joins quadrat tables and filters by park, year, and plot/visit type
 #------------------------
 joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'invasive'),
-                       GrowthForm=c('Tree', 'shrub', 'herb', 'gram', 'fern', 'vine'),
+                       GrowthForm=c('all', 'tree', 'shrub', 'herb', 'gram', 'fern', 'vine'),
                        park='all',years=2007:2023,
                        QAQC=FALSE, rejected=FALSE, anrevisit=FALSE, output, ...){
 
