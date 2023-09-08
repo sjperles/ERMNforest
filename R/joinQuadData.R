@@ -116,9 +116,8 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'invasive'),
 
 
   # Create final file for selecting and summarizing
-  park.herb <- merge(park.herb7[,c("Event_ID","Location_ID", "Unit_Code","Plot_Number","Panel","Year",
-                                   "Plot_Name", "Plant_ID", "QuadratID", "Cover", "Pres", "Latin_name", "Nativity","Invasive","GrowthForm")],
-                     herb10, by="Event_ID",all.x=T)
+  park.herb <- park.herb7[,c("Event_ID","Location_ID", "Unit_Code","Plot_Number","Panel","Year",
+                          "Plot_Name", "Plant_ID", "QuadratID", "Cover", "Pres", "Latin_name", "Nativity","Invasive","GrowthForm")]
 
 
   # Summarize quadrat data
