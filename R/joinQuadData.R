@@ -38,7 +38,7 @@
 #'
 #------------------------
 # Joins quadrat tables and filters by park, year, and plot/visit type
-# Cannot select data from 2007 since quadrat protocol was different and not compatibile with later years
+# Should not select data from 2007 since quadrat protocol was different and not compatible with later years
 #------------------------
 joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'invasive'),
                        GrowthForm=c('all', 'tree', 'shrub', 'herb', 'gram', 'fern', 'vine'),
