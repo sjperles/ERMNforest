@@ -78,7 +78,8 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'invasive'),
   herb4b <- herb4a %>% mutate (Pres = if_else(Cover>0,1,0))
 
 
-  herb11<-merge(herb4b,plants[,c("Plant_ID","Latin_name","NJ_Pd_Nativ","PA_Glac_Nativ","PA_Mt_Nativ","WV_Mt_Nativ","Invasive")], by="Plant_ID",all.x=T)
+  herb11<-merge(herb4b,plants[,c("Plant_ID","Latin_name","Tree","Herbaceous","Vine","Shrub","Graminoid","Fern",
+                                 "NJ_Pd_Nativ","PA_Glac_Nativ","PA_Mt_Nativ","WV_Mt_Nativ","Invasive")], by="Plant_ID",all.x=T)
   park.herb1<-merge(park.plots,herb11, by="Event_ID", all.y=T)
   park.herb2<-subset(park.herb1,!is.na(Unit_Code))
 
