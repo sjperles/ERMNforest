@@ -43,32 +43,29 @@ joinCWDData<-function(units=c('ha','acres'), park='all',years=2007:2023, QAQC=FA
   cwd.std2<-cwd.std %>% mutate(pct.slope=case_when(Degrees==0 ~ Slope_0, Degrees==60 ~ Slope_60, Degrees==120 ~ Slope_120,
                                                    Degrees==180 ~ Slope_180, Degrees==240 ~ Slope_240, Degrees==300 ~ Slope_300),
                                hdist=((((pct.slope/100)^2)+1)^0.5)*((pi^2)/(8*15)),
-                               diam=Diameter^2)
-  cwd3<-cwd.std2 %>% group_by(Event_ID,Degrees, hdist, Latin_name, Decay_Class_ID) %>% summarise(diam=sum(diam)) %>% ungroup()
+                               diam2=Diameter^2)
+  cwd3<-cwd.std2 %>% group_by(Event_ID,Degrees, hdist, Latin_name, Decay_Class_ID) %>% summarise(diam=sum(diam2)) %>% ungroup()
 
   cwd3a<-cwd.std2 %>% group_by(Event_ID,Degrees) %>% summarise(trdiam=sum(diam)) %>% ungroup()
   cwd3a$transamp<-1
   cwd3b<-cwd3a %>% group_by(Event_ID) %>% summarise(transamp=sum(transamp)) # transamp = number of CWD transects sampled in event
   cwd3d<-merge(cwd3,cwd3b,by="Event_ID", all.x=T)
 
-  cwd4<-cwd3d %>% group_by(Event_ID, Latin_name, Decay_Class_ID) %>% summarise(CWD_Vol=ifelse(is.na(sum(diam)),0,sum(hdist*diam)/transamp)) %>% ungroup()
-
+  cwd4a<-cwd3d %>% group_by(Event_ID, transamp, Latin_name, Decay_Class_ID) %>% summarise(Tot_CWD_Vol=ifelse(is.na(sum(diam)),0,sum(hdist*diam))) %>% ungroup()
+  cwd4 <- cwd4a %>% mutate (CWD_Vol = Tot_CWD_Vol/transamp)
 
   cwd5<-if (units=='acres'){
     cwd4 %>% mutate(CWD_Vol=CWD_Vol*35.314667/2.4710538)
     # 35.314667 is the # cubic feet in a cubic meter. 2.4710538 is # acres in 1 hectare.)
-  } else if (units=='ha'){return(cwd4)
-  }
+  } else if (units=='ha'){cwd4}
 
-  cwd6<-merge(park.plots,cwd5[,c("Event_ID","CWD_Vol", "Latin_Name","Decay_Class_ID")],by="Event_ID",all.x=T)
+  cwd6<-merge(park.plots,cwd5[,c("Event_ID","CWD_Vol", "Latin_name","Decay_Class_ID")],by="Event_ID",all.x=T)
 
-  #cwd6[,"CWD_Vol"][is.na(cwd6[,"CWD_Vol"])]<-0
+  cwddata<-cwd6 %>% filter(Latin_name !='No species observed')
 
-  cwd7<-merge(park.plots,cwd6,by="Event_ID", all.x=T)
 
-  cwddata<-cwd7 %>% filter(Latin_name !='No species observed') %>%
-    mutate(Latin_Name=Latin_name, Decay_Class=Decay_Class_ID,Tag=NA, Density=NA) %>%
-    select(Unit_Code, Plot_Name, Sample_Year, Date, Cycle, CWD_Vol, Tag, Latin_Name, Decay_Class, Density)
+  #  mutate(Latin_Name=Latin_name, Decay_Class=Decay_Class_ID,Tag=NA, Density=NA) %>%
+  #  select(Unit_Code, Plot_Name, Sample_Year, Date, Cycle, CWD_Vol, Tag, Latin_Name, Decay_Class, Density)
 
 
   return(data.frame(cwddata))
