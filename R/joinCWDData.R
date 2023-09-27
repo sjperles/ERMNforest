@@ -46,7 +46,7 @@ joinCWDData<-function(units=c('ha','acres'), park='all',years=2007:2023, QAQC=FA
                                diam2=Diameter^2)
   cwd3<-cwd.std2 %>% group_by(Event_ID,Degrees, hdist, Latin_name, Decay_Class_ID) %>% summarise(diam=sum(diam2)) %>% ungroup()
 
-  cwd3a<-cwd.std2 %>% group_by(Event_ID,Degrees) %>% summarise(trdiam=sum(diam)) %>% ungroup()
+  cwd3a<-cwd.std2 %>% group_by(Event_ID,Degrees) %>% summarise(trdiam=sum(diam2)) %>% ungroup()
   cwd3a$transamp<-1
   cwd3b<-cwd3a %>% group_by(Event_ID) %>% summarise(transamp=sum(transamp)) # transamp = number of CWD transects sampled in event
   cwd3d<-merge(cwd3,cwd3b,by="Event_ID", all.x=T)
