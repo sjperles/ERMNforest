@@ -103,7 +103,7 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic','invasive'), cano
 
   regen9<- if (speciesType=='native') {filter(regen8, Nativity == "native")
   } else if (speciesType=='exotic') {filter(regen8, Nativity == "exotic")
-  } else if (speciesType=='invasive'){filter(park.herb,Invasive==TRUE)
+  } else if (speciesType=='invasive'){filter(regen8,Invasive==TRUE)
   } else if (speciesType=='all'){(regen8)
   }
 

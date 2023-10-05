@@ -74,6 +74,8 @@ joinTreeData<-function(status=c('all', 'live','dead'), speciesType=c('all', 'nat
   tree3 <- merge(tree2, plants[,c("Plant_ID","Latin_name","NJ_Pd_Nativ","PA_Glac_Nativ","PA_Mt_Nativ","WV_Mt_Nativ","Invasive","Canopy")],
                  by="Plant_ID", all.x=T)
 
+  names(tree2)
+
   tree3n1 <- tree3 %>% mutate (Nativity1 = if_else(Unit_Code == "DEWA",PA_Glac_Nativ,
                                                    if_else(Unit_Code == "ALPO",PA_Mt_Nativ,
                                                            if_else(Unit_Code == "JOFL",PA_Mt_Nativ,
@@ -116,8 +118,6 @@ joinTreeData<-function(status=c('all', 'live','dead'), speciesType=c('all', 'nat
   } else {tree7}
 
 
-  tree9<-merge(park.plots, tree8, by='Event_ID', all.x=T)
-
-  return(data.frame(tree9))
+  return(data.frame(tree8))
 } # end of function
 
