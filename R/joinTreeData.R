@@ -99,7 +99,7 @@ joinTreeData<-function(status=c('all', 'live','dead'), speciesType=c('all', 'nat
 
   tree5<- if (status=='live') {filter(tree4,Status_ID==1)
   } else if (status=='dead') {filter(tree4,Status_ID==2)
-  } else if (status=='all') {filter(tree4,0<Status_ID>3)
+  } else if (status=='all') {filter(tree4,Status_ID>3 & Status_ID<0)
   }
 
   tree6<- if (speciesType=='native'){filter(tree5,Nativity=="native")
