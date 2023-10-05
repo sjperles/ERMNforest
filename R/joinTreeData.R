@@ -27,9 +27,6 @@
 #' \item{"canopy"}{Returns only species that are considered native canopy-forming trees as defined in Canopy in tlu_Plants.}
 #' }
 #'
-#' @param dist_m Filter trees by a distance that is less than or equal to the specified distance in meters
-#' of the tree to the center of the plot. If no distance is specified, then all trees will be selected. For
-#' example, to select an area of trees that is 100 square meters in area, use a distance of 5.64m.
 #'
 #' @return returns a dataframe with plot-level and visit-level tree data
 #'
@@ -54,7 +51,7 @@
 #------------------------
 joinTreeData<-function(status=c('all', 'live','dead'), speciesType=c('all', 'native','exotic', 'invasive'),
                        canopyPosition = c("all", "canopy"), park='all',
-                       years=2007:2023, QAQC=FALSE, rejected=FALSE, anrevisit=FALSE, dist_m=NA, output, ...){
+                       years=2007:2023, QAQC=FALSE, rejected=FALSE, anrevisit=FALSE, output, ...){
 
   status<-match.arg(status)
   speciesType<-match.arg(speciesType)
@@ -101,7 +98,7 @@ joinTreeData<-function(status=c('all', 'live','dead'), speciesType=c('all', 'nat
 
   tree5<- if (status=='live') {filter(tree4,Status_ID==1)
   } else if (status=='dead') {filter(tree4,Status_ID==2)
-  } else if (status=='all') {filter(tree4,Status_ID>3 & Status_ID<0)
+  } else if (status=='all') {filter(tree4,Status_ID==1 | Status_ID==2)
   }
 
   tree6<- if (speciesType=='native'){filter(tree5,Nativity=="native")
