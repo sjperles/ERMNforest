@@ -12,6 +12,7 @@
 #' \item{"all"}{Default. Returns all species.}
 #' \item{"native"}{Returns native species only}
 #' \item{"exotic"}{Returns exotic species only, must select canopyForm='all'}
+#' \item{"invasive"}{Returns species on the Indicator Invasive List}
 #' }
 #' @param canopyForm Allows you to filter on only canopy-forming species or include all species.
 #' \describe{
@@ -41,7 +42,7 @@
 #------------------------
 # Joins microplot tables and filters by park, year, and plot/visit type
 #------------------------
-joinRegenData<-function(speciesType=c('all', 'native','exotic'), canopyForm=c('canopy','all'),
+joinRegenData<-function(speciesType=c('all', 'native','exotic','invasive'), canopyForm=c('canopy','all'),
   units=c('micro','ha','acres'), park='all',years=2007:2023, QAQC=FALSE, rejected=FALSE, anrevisit=FALSE, output, ...){
 
   speciesType<-match.arg(speciesType)
@@ -76,7 +77,7 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic'), canopyForm=c('c
   regen2<-merge(park.plots,regen1,by='Event_ID', all.x=T,all.y=F)
 
   regen3<-merge(regen2,plants[,c("Plant_ID","Latin_name","Common","Canopy","PA_Glac_Nativ",
-                                 "PA_Mt_Nativ","WV_Mt_Nativ","NJ_Pd_Nativ")], by='Plant_ID',all.x=T)
+                                 "PA_Mt_Nativ","WV_Mt_Nativ","NJ_Pd_Nativ","Invasive")], by='Plant_ID',all.x=T)
 
   # Deal with Nativity
   regen4 <- regen3 %>% mutate (Nativity1 = if_else(Unit_Code == "DEWA",PA_Glac_Nativ,
@@ -102,6 +103,7 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic'), canopyForm=c('c
 
   regen9<- if (speciesType=='native') {filter(regen8, Nativity == "native")
   } else if (speciesType=='exotic') {filter(regen8, Nativity == "exotic")
+  } else if (speciesType=='invasive'){filter(park.herb,Invasive==TRUE)
   } else if (speciesType=='all'){(regen8)
   }
 

@@ -101,13 +101,12 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'invasive'),
   park.herb4 <- park.herb3a %>% mutate (Nativity3 = if_else(Unit_Code == "DEWA" & is.na(Nativity2),PA_Mt_Nativ,Nativity2))
 
   park.herb4$Nativity3[is.na(park.herb4$Nativity3)] <- "Unknown"
-  park.herb5 <- park.herb4 %>% mutate (Nativity4 = if_else(Nativity3 == "maybe exotic","exotic",
+  park.herb5 <- park.herb4 %>% mutate (Nativity = if_else(Nativity3 == "maybe exotic","exotic",
                                                           if_else(Nativity3 == "maybe native", "native",Nativity3)))
 
-  park.herb6 <- park.herb5 %>% mutate (Nativity = if_else(Invasive == TRUE, "invasive",Nativity4))
 
   # Create single column for growth form
-  park.herb7 <- park.herb6 %>% mutate (GrowthForm = if_else(Tree == TRUE,"tree",
+  park.herb7 <- park.herb5 %>% mutate (GrowthForm = if_else(Tree == TRUE,"tree",
                                                             if_else(Shrub == TRUE,"shrub",
                                                                     if_else(Herbaceous == TRUE, "herb",
                                                                             if_else(Vine == TRUE, "vine",
