@@ -35,9 +35,6 @@
 #' # compile tree data for live trees only in most recent survey in all parks
 #' live_trees <- joinTreeData(status = 'live', years = 2016:2022)
 #'
-#' # compile BLUE trees within a circle the size of an FIA subplot in all years
-#' BLUE_FIAsub <- joinTreeData(park = 'BLUE', dist_m = 7.3)
-#'
 #' # compile dead trees in FRHI in all years
 #' FRHI_dead <- joinTreeData(park = 'FRHI', status = 'dead')
 #'
@@ -111,10 +108,6 @@ joinTreeData<-function(status=c('all', 'live','dead'), speciesType=c('all', 'nat
   } else if (canopyPosition=='all'){(tree6)
   }
 
-  tree8<-if (!is.na(dist_m)){filter(tree7,Distance<=dist_m)
-  } else {tree7}
-
-
-  return(data.frame(tree8))
+  return(data.frame(tree7))
 } # end of function
 
