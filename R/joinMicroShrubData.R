@@ -96,7 +96,7 @@ joinMicroShrubData<-function(speciesType = c('all', 'native','exotic'), park='al
 
   # Merge selected data with micro.samp
   shrub12 <- merge(micro.samp,shrub11,by="Event_ID",all.x=T, all.y=T)
-  shrub12[,8:9][is.na(shrub12[,8:9])]<-0
+  shrub12[,c("m.freq","tot.cover")][is.na(shrub12[,c("m.freq","tot.cover")])]<-0
   shrub13 <- shrub12 %>% mutate(ave.sp.rich = (m.freq/MSamp),
                                 ave.cover = (tot.cover/MSamp))
 
