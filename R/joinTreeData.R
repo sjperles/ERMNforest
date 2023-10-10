@@ -61,14 +61,12 @@ joinTreeData<-function(status=c('all', 'live','dead'), speciesType=c('all', 'nat
  # Prepare tree data
 
   tree <- merge(trees, treedata, by="Tree_ID", all.y=T, all.x=T)
-  tree <- tree %>% select(c("Tree_ID", "Tree_Data_ID", "Plant_ID", "Tree_Number", "Event_ID",
+  tree1 <- tree %>% select(c("Tree_ID", "Tree_Data_ID", "Plant_ID", "Tree_Number", "Event_ID",
                             "DBH", "Status_ID", "Crown_Class_ID", "Diameter_Check_ID", "Calipers_Used", "Notes", "QC_DBH_ID"))
 
-  tree2 <- merge(park.plots, tree, all.x=F, by="Event_ID")
+  tree2 <- merge(park.plots, tree1, all.x=F, by="Event_ID")
   tree3 <- merge(tree2, plants[,c("Plant_ID","Latin_name","NJ_Pd_Nativ","PA_Glac_Nativ","PA_Mt_Nativ","WV_Mt_Nativ","Invasive","Canopy")],
                  by="Plant_ID", all.x=T)
-
-  names(tree2)
 
   tree3n1 <- tree3 %>% mutate (Nativity1 = if_else(Unit_Code == "DEWA",PA_Glac_Nativ,
                                                    if_else(Unit_Code == "ALPO",PA_Mt_Nativ,
@@ -89,7 +87,7 @@ joinTreeData<-function(status=c('all', 'live','dead'), speciesType=c('all', 'nat
   tree4a <- tree3N[,c("Unit_Code","Plot_Name","Plot_Number","X_Coord","Y_Coord","Panel","Year","Event_QAQC","Cycle",
                       "Tree_Number","DBH","Status_ID","Crown_Class_ID","Latin_name", "Invasive","Nativity","Canopy")]
 
-  tree4 <- tree4a %>% mutate(BA_cm2 = (((DBH / 2)^2)*3.1415926535),
+  tree4 <- tree4a %>% mutate(BA_cm2 = ifelse(DBH<999997.0,(((DBH / 2)^2)*3.1415926535),0),
                              pres = ifelse(DBH<999997.0,1,0))
 
 

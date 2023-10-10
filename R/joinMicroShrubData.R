@@ -81,8 +81,8 @@ joinMicroShrubData<-function(speciesType = c('all', 'native','exotic'), park='al
   } else if (speciesType=='all'){(shrub9)
   }
 
-  #Summarize by plot and nativity
-  shrub11 <- shrub10 %>% group_by(Event_ID,Nativity) %>%
+  #Summarize by plot
+  shrub11 <- shrub10 %>% group_by(Event_ID) %>%
     summarise(m.freq = sum(present), tot.cover = sum(cover))
 
   # Determine number of microplots sampled at each event

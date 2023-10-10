@@ -17,8 +17,8 @@
 #'
 #' @examples
 #' importData() #imports using default odbc
-#' # Compile CWD data for MABI for most recent survey and return in ft^3/acre
-#' cwd_data <- joinCWDData(park = 'MABI', years = c(2014:2018), units = 'acres')
+#' # Compile CWD data for GARI for most recent survey and return in ft^3/acre
+#' cwd_data <- joinCWDData(park = 'GARI', years = c(2014:2018), units = 'acres')
 #'
 #'
 #' @export
