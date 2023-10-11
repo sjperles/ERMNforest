@@ -130,7 +130,8 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic','invasive'), cano
   micro.samp1 <- plot.micro %>% mutate(MSamp = ifelse(Nonvascular_Cover_Class_ID==999999 & Vine_Cover_Class_ID==999999 & Graminoid_Cover_Class_ID==999999
                                                       & Fern_Cover_Class_ID==999999 & Herbaceous_Cover_Class_ID==999999,0,1))
 
-  micro.samp<-micro.samp1 %>% group_by(Event_ID,Unit_Code,Plot_Name,Cycle,Year) %>% summarise(MSamp=sum(MSamp)) #NUMBER OF MICROPLOTS SAMPLED PER EVENT!
+  micro.samp2<-micro.samp1 %>% group_by(Event_ID,Unit_Code,Plot_Name,Cycle,Year) %>% summarise(MSamp=sum(MSamp)) #NUMBER OF MICROPLOTS SAMPLED PER EVENT!
+  micro.samp<-micro.samp2 %>% filter(MSamp>0)
 
 
   # Calculate plot-average among microplots sampled
