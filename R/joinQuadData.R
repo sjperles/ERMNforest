@@ -24,7 +24,7 @@
 #' \item{"vine"}{Returns vine species only}
 #' }
 #'
-#' @return Returns a dataframe with cover class midpoints for each quadrat and includes guild for each species.
+#' @return Returns a dataframe with average cover and species richness across quadrats and total plot species richness.
 #'
 #' @examples
 #' importData()
