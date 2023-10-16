@@ -11,6 +11,7 @@
 #' \item{"all"}{Default. Returns all species.}
 #' \item{"native"}{Returns native species only}
 #' \item{"exotic"}{Returns exotic species only}
+#' \item{"unknown"}{Returns only species of unknown nativity, plants identified only to genus or family}
 #' \item{"invasive"}{Returns species on the Indicator Invasive List}
 #'
 #' @param GrowthForm Allows you to filter by tree, shrub, herb, fern, graminoid, vine, or include all species.
@@ -40,7 +41,7 @@
 # Joins quadrat tables and filters by park, year, and plot/visit type
 # Should not select data from 2007 since quadrat protocol was different and not compatible with later years
 #------------------------
-joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'invasive'),
+joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'invasive'),
                        GrowthForm=c('all', 'tree', 'shrub', 'herb', 'gram', 'fern', 'vine'),
                        park='all',years=2008:2023,
                        QAQC=FALSE, rejected=FALSE, anrevisit=FALSE, output, ...){
@@ -122,6 +123,7 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'invasive'),
   # Summarize quadrat data
   park.herb<-if (speciesType=='native'){filter(park.herb,Nativity=="native")
   } else if (speciesType=='exotic'){filter(park.herb,Nativity=="exotic")
+  } else if (speciesType=='unknown'){filter(park.herb,Nativity=="Unknown")
   } else if (speciesType=='invasive'){filter(park.herb,Invasive==TRUE)
   } else if (speciesType=='all'){(park.herb)
   }
