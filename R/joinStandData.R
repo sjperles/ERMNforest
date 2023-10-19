@@ -22,7 +22,7 @@
 #------------------------
 # Join stand table
 #------------------------
-joinStandData<-function(park='all', years=2008:2023, QAQC=FALSE,
+joinStandData<-function(park='all', years=2007:2023, QAQC=FALSE,
                         rejected=FALSE, anrevisit=FALSE, output, ...){
 
   park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,rejected = rejected,

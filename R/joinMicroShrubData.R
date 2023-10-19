@@ -21,7 +21,7 @@
 #' native_shrubs <- joinMicroShrubData(park ='NERI', speciesType = 'native')
 #'
 #' # all parks with exotic shrubs in most recent survey
-#' exotic_shrubs <- joinMicroShrubData(years = c(2014,2018), speciesType = 'exotic')
+#' exotic_shrubs <- joinMicroShrubData(years = c(2014:2018), speciesType = 'exotic')
 #'
 #' @export
 #'
