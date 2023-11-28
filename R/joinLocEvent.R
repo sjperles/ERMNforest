@@ -24,10 +24,10 @@
 #' \describe{
 #' \item{FALSE}{Default. Only returns visits that are not QAQC visits}
 #' \item{TRUE}{Returns all visits, including QAQC visits}}
-#' @param rejected Allows you to remove (FALSE) or include (TRUE) rejected plots.
+#' @param retired Allows you to remove (FALSE) or include (TRUE) retired plots.
 #' \describe{
-#' \item{FALSE}{Default. Only returns plots that were not rejected.}
-#' \item{TRUE}{returns all records}}
+#' \item{FALSE}{Default. Only returns plots that are active}
+#' \item{TRUE}{returns all active and retired plots}}
 #' @param anrevisit Allows you to remove (FALSE) or include (TRUE) annual revisits from 2008 - 2011.
 #' \describe{
 #' \item{FALSE}{Default. Only returns plots that were sampled on 4 year cycle, does not include annual revisits.}
@@ -51,7 +51,7 @@
 #------------------------
 # Joins tbl_Locations and tbl_Events tables and filters by park, year, and plot/visit type
 #------------------------
-joinLocEvent<-function(park="all", QAQC=FALSE, rejected=FALSE, anrevisit=FALSE,
+joinLocEvent<-function(park="all", QAQC=FALSE, retired=FALSE, anrevisit=FALSE,
                        years=2007:2023, output='short', ...){
 
   loc2<-loc %>% mutate(Unit_Code=as.factor(str_sub(Unit_Code,1,4)))
@@ -63,9 +63,9 @@ joinLocEvent<-function(park="all", QAQC=FALSE, rejected=FALSE, anrevisit=FALSE,
   } else if (QAQC==TRUE) {(loc3)
   } else {stop("QAQC must be TRUE or FALSE")}
 
-  loc5<- if (rejected==FALSE) {filter(loc4, Status == "Active")
-  } else if (rejected==TRUE) {(loc4)
-  } else {stop("rejected must be TRUE or FALSE")}
+  loc5<- if (retired==FALSE) {filter(loc4, Status == "Active")
+  } else if (retired==TRUE) {filter(loc4, Status != "Rejected")
+  } else {stop("retired must be TRUE or FALSE")}
 
   loc6<- if (park=='all') {(loc5)
   } else if (park %in% levels(loc5$Unit_Code)){filter(loc5,Unit_Code==park)
