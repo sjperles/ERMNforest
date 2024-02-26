@@ -39,7 +39,7 @@
 #'
 #------------------------
 # Joins additional plot species table with plant look-up and filters by park, year, and plot/visit type
-# Should not select data from 2007 since quadrat protocol was different and not compatible with later years
+# Should not select data from 2007 since additional species walk around was not collected in 2007
 #------------------------
 joinAddPlotSp<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'invasive'),
                        GrowthForm=c('all', 'tree', 'shrub', 'herb', 'gram', 'fern', 'vine'),
