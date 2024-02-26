@@ -29,11 +29,11 @@
 #'
 #' @examples
 #' importData()
-#' # compile quadrat data for invasive species in ALPO for all years
-#' SARA_quads <- joinQuadData(park = 'ALPO', speciesType = 'invasive')
+#' # compile additional plot species data for invasive species in ALPO for all years
+#' ALPO_plotsp <- joinAddPlotSp(park = 'ALPO', speciesType = 'invasive')
 #'
-#' # compile native species only for all parks in most recent survey
-#' native_quads <- joinQuadData(speciesType = 'native', years = c(2014:2018))
+#' # compile native species only from plot walk-around search for all parks in most recent survey
+#' native_plotsp <- joinAddPlotSp(speciesType = 'native', years = c(2014:2018))
 #'
 #' @export
 #'
