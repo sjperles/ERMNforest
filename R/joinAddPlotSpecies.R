@@ -29,16 +29,16 @@
 #'
 #' @examples
 #' importData()
-#' # compile additional plot species data for invasive species in ALPO for all years
+#' # compiles additional plot species data for invasive species in ALPO for all years
 #' ALPO_plotsp <- joinAddPlotSp(park = 'ALPO', speciesType = 'invasive')
 #'
-#' # compile native species only from plot walk-around search for all parks in most recent survey
+#' # compiles native species only from plot walk-around search for all parks in most recent survey
 #' native_plotsp <- joinAddPlotSp(speciesType = 'native', years = c(2014:2018))
 #'
 #' @export
 #'
 #------------------------
-# Joins additional plot species table with plant look-up and filters by park, year, and plot/visit type
+# Joins additional plot species table with plant look-up table and filters by park, year, and plot/visit type
 # Should not select data from 2007 since additional species walk around was not collected in 2007
 #------------------------
 joinAddPlotSp<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'invasive'),
