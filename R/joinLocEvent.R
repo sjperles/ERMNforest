@@ -79,7 +79,8 @@ joinLocEvent<-function(park="all", QAQC=FALSE, retired=FALSE, anrevisit=FALSE,
   } else if (anrevisit==TRUE) {(park.ev1)
   } else {stop("QAQC must be TRUE or FALSE")}
 
-  park.ev4<- park.ev3 %>% filter(Year %in% years) %>% droplevels()
+  park.ev4 <- park.ev3 %>% filter(Year %in% years) %>% droplevels()
+  park.ev4$Year <- as.numeric(park.ev4$Year)
 
   park.plots<- if (output=='short') {park.ev4 %>% select(Location_ID,Event_ID,Unit_Code,
     Plot_Name, Plot_Number, X_Coord, Y_Coord, Panel, Year, Event_QAQC, Cycle)
