@@ -54,7 +54,7 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic','invasive'), cano
 
 # Prepare the seedling data
   seed1 <- merge(micro,sdlg, by="Microplot_Characterization_Data_ID",all.y=T,all.x=T)
-  seed <- mutate(seed1,seedht0=Num_Seedlings_5_15cm,
+  seed <- seed1 %>% mutate(seedht0=Num_Seedlings_5_15cm,
                  seedht1=Num_Seedlings_15_30cm,
                  seedht2=Num_Seedlings_30_100cm,
                  seedht3=Num_Seedlings_100_150cm,
@@ -115,7 +115,12 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic','invasive'), cano
                                 stock5u = (seedht0+seedht1+(seedht2*2)+(seedht3*20)+(seedht4*50)+(sap.stems*50)),
                                 stock15u = (seedht1+(seedht2*2)+(seedht3*20)+(seedht4*50)+(sap.stems*50)))
 
-  regen11 <- regen10 %>% group_by(Event_ID,Unit_Code,Plot_Name,Cycle,Year) %>% summarise (plot.total = sum(total),
+  regen11 <- regen10 %>% group_by(Event_ID,Unit_Code,Plot_Name,Cycle,Year) %>% summarise (plot.seedht0 = sum(seedht0),
+                                                                                          plot.seedht1 = sum(seedht1),
+                                                                                          plot.seedht2 = sum(seedht2),
+                                                                                          plot.seedht3 = sum(seedht3),
+                                                                                          plot.seedht4 = sum(seedht4),
+                                                                                          plot.total = sum(total),
                                                                                           plot.U15 = sum(totU15),
                                                                                           plot.U30 = sum(totU30),
                                                                                           plot.stock5u = sum(stock5u),
@@ -137,7 +142,12 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic','invasive'), cano
   # Calculate plot-average among microplots sampled
   regen12 <- merge(micro.samp, regen11, by=c("Event_ID","Unit_Code","Plot_Name","Cycle","Year"), all.x=T)
 
-  regen13 <- regen12 %>% mutate (ave.total = (plot.total/MSamp),
+  regen13 <- regen12 %>% mutate (ave.seedht0 = (plot.seedht0/MSamp),
+                                 ave.seedht1 = (plot.seedht1/MSamp),
+                                 ave.seedht2 = (plot.seedht2/MSamp),
+                                 ave.seedht3 = (plot.seedht3/MSamp),
+                                 ave.seedht4 = (plot.seedht4/MSamp),
+                                 ave.total = (plot.total/MSamp),
                                  ave.U15 = (plot.U15/MSamp),
                                  ave.U30 = (plot.U30/MSamp),
                                  ave.stock5u = (plot.stock5u/MSamp),
@@ -149,22 +159,32 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic','invasive'), cano
 
   regen14<-if (units=='ha'){
     regen13 %>%
-      mutate(tot.seed.dens = (ave.total*10000)/(pi*4),
-        U15.seed.dens = (ave.U15*10000)/(pi*4),
-        U30.seed.dens = (ave.U30*10000)/(pi*4),
-        sap.dens = (ave.sapstems*10000)/(pi*4),
-        sap.BA.m2 = ave.sapBAcm2/(pi*4),
-        ave.stock5u = ave.stock5u,
-        ave.stock15u = ave.stock5u)
+      mutate(seedht0.dens = (ave.seedht0*10000)/(pi*4),
+             seedht1.dens = (ave.seedht1*10000)/(pi*4),
+             seedht2.dens = (ave.seedht2*10000)/(pi*4),
+             seedht3.dens = (ave.seedht3*10000)/(pi*4),
+             seedht4.dens = (ave.seedht4*10000)/(pi*4),
+            tot.seed.dens = (ave.total*10000)/(pi*4),
+            U15.seed.dens = (ave.U15*10000)/(pi*4),
+            U30.seed.dens = (ave.U30*10000)/(pi*4),
+            sap.dens = (ave.sapstems*10000)/(pi*4),
+            sap.BA.m2 = ave.sapBAcm2/(pi*4),
+            ave.stock5u = ave.stock5u,
+            ave.stock15u = ave.stock5u)
   } else if (units=='acres'){
     regen13 %>%
-      mutate(tot.seed.dens = (ave.total*4046.856)/(pi*4),
-      U15.seed.dens = (ave.U15*4046.856)/(pi*4),
-      U30.seed.dens = (ave.U30*4046.856)/(pi*4),
-      sap.dens = (ave.sapstems*4046.856)/(pi*4),
-      sap.BA.ft2 = (ave.sapBAcm2*4.356)/(pi*4),
-      ave.stock5u = ave.stock5u,
-      ave.stock15u = ave.stock5u)
+      mutate(seedht0.dens = (ave.seedht0*4046.856)/(pi*4),
+             seedht1.dens = (ave.seedht1*4046.856)/(pi*4),
+             seedht2.dens = (ave.seedht2*4046.856)/(pi*4),
+             seedht3.dens = (ave.seedht3*4046.856)/(pi*4),
+             seedht4.dens = (ave.seedht4*4046.856)/(pi*4),
+             tot.seed.dens = (ave.total*4046.856)/(pi*4),
+             U15.seed.dens = (ave.U15*4046.856)/(pi*4),
+             U30.seed.dens = (ave.U30*4046.856)/(pi*4),
+             sap.dens = (ave.sapstems*4046.856)/(pi*4),
+             sap.BA.ft2 = (ave.sapBAcm2*4.356)/(pi*4),
+             ave.stock5u = ave.stock5u,
+             ave.stock15u = ave.stock5u)
   } else if (units=='micro'){regen13
   }
 
