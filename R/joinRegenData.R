@@ -126,7 +126,8 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic','invasive'), cano
                                                                                           plot.stock5u = sum(stock5u),
                                                                                           plot.stock15u = sum(stock15u),
                                                                                           plot.sapstems = sum(sap.stems),
-                                                                                          plot.sapBAcm2 = sum(tot.sap.ba.cm2))
+                                                                                          plot.sapBAcm2 = sum(tot.sap.ba.cm2),
+                                                                                          plot.regen = (plot.total+plot.sapstems))
 
 
   # Determine number of microplots sampled at each event
@@ -153,7 +154,8 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic','invasive'), cano
                                  ave.stock5u = (plot.stock5u/MSamp),
                                  ave.stock15u = (plot.stock15u/MSamp),
                                  ave.sapstems = (plot.sapstems/MSamp),
-                                 ave.sapBAcm2 = (plot.sapBAcm2/MSamp))
+                                 ave.sapBAcm2 = (plot.sapBAcm2/MSamp),
+                                 ave.regen = (plot.regen/MSamp))
   regen13[,6:20][is.na(regen13[,6:20])]<-0
 
 
