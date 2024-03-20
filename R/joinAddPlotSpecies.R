@@ -56,7 +56,7 @@ joinAddPlotSp<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inv
   addspp1a<-merge(addspp,plants[,c("Plant_ID","Latin_name","Tree","Herbaceous","Vine","Shrub","Graminoid","Fern",
                                    "NJ_Pd_Nativ","PA_Glac_Nativ","PA_Mt_Nativ","WV_Mt_Nativ","Invasive")], by="Plant_ID",all.x=T)
 
-  addsp1<-subset(addspp1a, Plant_ID<9990)
+  addspp1<-subset(addspp1a, Plant_ID<9990)
   addspp1$Pres <- 1
   addspp2<-merge(park.plots,addspp1, by="Event_ID", all.y=T)
   addspp3<-subset(addspp2,!is.na(Unit_Code))
