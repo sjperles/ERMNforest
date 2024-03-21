@@ -1,11 +1,11 @@
 #' @include joinLocEvent.R
-#' @title joinRegenData: compiles seedling and sapling data
+#' @title joinRegenSpData: compiles seedling and sapling data by species
 #'
 #' @importFrom dplyr select filter arrange mutate summarise group_by ungroup
 #' @importFrom magrittr %>%
 #' @importFrom stringr str_sub str_pad
 #'
-#' @description This function combines seedling and sapling data, and calculates stocking index. Must run importData first.
+#' @description This function combines seedling and sapling data by species. Must run importData first.
 #'
 #' @param speciesType Allows you to filter on native, exotic or include all species.
 #' \describe{
@@ -27,22 +27,22 @@
 #'}
 #'
 #'
-#' @return returns a dataframe with seedling and sapling densities, and stocking index
+#' @return returns a dataframe with seedling and sapling densities by species
 #'
 #' @examples
 #' # compile seedling and sapling data for all parks and all species in most recent cycle
-#' regen_data <- joinRegenData(canopyForm = 'all', years = c(2017:2022))
+#' regen_data <- joinRegenSpData(canopyForm = 'all', years = c(2017:2022))
 #'
 #' # compile regen data for only canopy-forming (default) and native species in FONE for all years
-#' FONE_regen <- joinRegenData(park = 'FONE', speciesType = 'native')
+#' FONE_regen <- joinRegenSpData(park = 'FONE', speciesType = 'native')
 #'
 
 #' @export
 #'
 #------------------------
-# Joins microplot tables and filters by park, year, and plot/visit type
+# Joins microplot tables and filters by park, year, and plot/visit type, summarizes regeneration data by species
 #------------------------
-joinRegenData<-function(speciesType=c('all', 'native','exotic','invasive'), canopyForm=c('canopy','all'),
+joinRegenSpData<-function(speciesType=c('all', 'native','exotic','invasive'), canopyForm=c('canopy','all'),
   units=c('micro','ha','acres'), park='all',years=2007:2023, QAQC=FALSE, rejected=FALSE, anrevisit=FALSE, output, ...){
 
   speciesType<-match.arg(speciesType)
@@ -108,14 +108,12 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic','invasive'), cano
   }
 
 
-  # Summarise data at plot level
+  # Summarise data by species at plot level
   regen10 <- regen9 %>% mutate (total = (seedht0+seedht1+seedht2+seedht3+seedht4),
                                 totU15 = (seedht1+seedht2+seedht3+seedht4),
-                                totU30 = (seedht2+seedht3+seedht4),
-                                stock5u = (seedht0+seedht1+(seedht2*2)+(seedht3*20)+(seedht4*50)+(sap.stems*50)),
-                                stock15u = (seedht1+(seedht2*2)+(seedht3*20)+(seedht4*50)+(sap.stems*50)))
+                                totU30 = (seedht2+seedht3+seedht4))
 
-  regen11 <- regen10 %>% group_by(Event_ID,Unit_Code,Plot_Name,Cycle,Year) %>% summarise (plot.seedht0 = sum(seedht0),
+  regen11a <- regen10 %>% group_by(Event_ID,Unit_Code,Plot_Name,Cycle,Year,Plant_ID,Latin_name,Common) %>% summarise (plot.seedht0 = sum(seedht0),
                                                                                           plot.seedht1 = sum(seedht1),
                                                                                           plot.seedht2 = sum(seedht2),
                                                                                           plot.seedht3 = sum(seedht3),
@@ -123,12 +121,11 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic','invasive'), cano
                                                                                           plot.total = sum(total),
                                                                                           plot.U15 = sum(totU15),
                                                                                           plot.U30 = sum(totU30),
-                                                                                          plot.stock5u = sum(stock5u),
-                                                                                          plot.stock15u = sum(stock15u),
                                                                                           plot.sapstems = sum(sap.stems),
                                                                                           plot.sapBAcm2 = sum(tot.sap.ba.cm2),
                                                                                           plot.regen = (plot.total+plot.sapstems))
 
+  regen11 <- regen11a %>% filter(Plant_ID<9996)
 
   # Determine number of microplots sampled at each event
   plot.micro<-merge(park.plots, micro, by="Event_ID", all.x=T)
@@ -151,12 +148,10 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic','invasive'), cano
                                  ave.total = (plot.total/MSamp),
                                  ave.U15 = (plot.U15/MSamp),
                                  ave.U30 = (plot.U30/MSamp),
-                                 ave.stock5u = (plot.stock5u/MSamp),
-                                 ave.stock15u = (plot.stock15u/MSamp),
                                  ave.sapstems = (plot.sapstems/MSamp),
                                  ave.sapBAcm2 = (plot.sapBAcm2/MSamp),
                                  ave.regen = (plot.regen/MSamp))
-  regen13[,6:31][is.na(regen13[,6:31])]<-0
+  regen13[,9:30][is.na(regen13[,9:30])]<-0
 
 
   regen14<-if (units=='ha'){
@@ -192,7 +187,7 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic','invasive'), cano
   } else if (units=='micro'){regen13
   }
 
-  regen14<-regen14 %>% arrange(Plot_Name,Year)
+  regen14<-regen14 %>% arrange(Plot_Name,Year,Latin_name)
   return(data.frame(regen14))
 } # end of function
 
