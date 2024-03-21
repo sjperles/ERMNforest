@@ -166,9 +166,7 @@ joinRegenSpData<-function(speciesType=c('all', 'native','exotic','invasive'), ca
             U30.seed.dens = (ave.U30*10000)/(pi*4),
             sap.dens = (ave.sapstems*10000)/(pi*4),
             regen.dens = (ave.regen*10000)/(pi*4),
-            sap.BA.m2 = ave.sapBAcm2/(pi*4),
-            ave.stock5u = ave.stock5u,
-            ave.stock15u = ave.stock5u)
+            sap.BA.m2 = ave.sapBAcm2/(pi*4))
   } else if (units=='acres'){
     regen13 %>%
       mutate(seedht0.dens = (ave.seedht0*4046.856)/(pi*4),
@@ -181,9 +179,7 @@ joinRegenSpData<-function(speciesType=c('all', 'native','exotic','invasive'), ca
              U30.seed.dens = (ave.U30*4046.856)/(pi*4),
              sap.dens = (ave.sapstems*4046.856)/(pi*4),
              regen.dens = (ave.regen*4046.856)/(pi*4),
-             sap.BA.ft2 = (ave.sapBAcm2*4.356)/(pi*4),
-             ave.stock5u = ave.stock5u,
-             ave.stock15u = ave.stock5u)
+             sap.BA.ft2 = (ave.sapBAcm2*4.356)/(pi*4))
   } else if (units=='micro'){regen13
   }
 
