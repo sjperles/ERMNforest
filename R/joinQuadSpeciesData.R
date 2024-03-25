@@ -1,5 +1,5 @@
 #' @include joinLocEvent.R
-#' @title joinQuadData: compiles quadrat species data
+#' @title joinQuadSpeciesData: compiles quadrat species data by plot and species
 #'
 #' @importFrom dplyr select filter arrange mutate summarise group_by rename_at
 #' @importFrom magrittr %>%
@@ -25,23 +25,23 @@
 #' \item{"vine"}{Returns vine species only}
 #' }
 #'
-#' @return Returns a dataframe with average cover and species richness across quadrats and total plot species richness.
+#' @return Returns a dataframe with average cover by species across quadrats for each plot .
 #'
 #' @examples
 #' importData()
 #' # compile quadrat data for invasive species in ALPO for all years
-#' SARA_quads <- joinQuadData(park = 'ALPO', speciesType = 'invasive')
+#' SARA_quads <- joinQuadSpeciesData(park = 'ALPO', speciesType = 'invasive')
 #'
 #' # compile native species only for all parks in most recent survey
-#' native_quads <- joinQuadData(speciesType = 'native', years = c(2014:2018))
+#' native_quads <- joinQuadSpeciesData(speciesType = 'native', years = c(2014:2018))
 #'
 #' @export
 #'
 #------------------------
-# Joins quadrat tables and filters by park, year, and plot/visit type
+# Joins quadrat tables and filters by park, year, species type, and plot/visit type
 # Should not select data from 2007 since quadrat protocol was different and not compatible with later years
 #------------------------
-joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'invasive'),
+joinQuadSpData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'invasive'),
                        GrowthForm=c('all', 'tree', 'shrub', 'herb', 'gram', 'fern', 'vine'),
                        park='all',years=2008:2023,
                        QAQC=FALSE, rejected=FALSE, anrevisit=FALSE, output, ...){
@@ -138,32 +138,17 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inva
   }
 
 
-  # Summarizing quadrat data
-  plot.herb1 <- subset(park.herb10, Pres > 0)
-  plot.herb2 <- plot.herb1 %>% distinct(Event_ID, Latin_name, .keep_all = TRUE)
-  plot.sp.rich <- plot.herb2 %>% group_by (Event_ID) %>% summarise(plot.sp.rich = sum(Pres))
-  # Total species richness in plot from quadrats
+  park.herb11 <- subset(park.herb10, Pres > 0)
+  herb5 <- park.herb11 %>% group_by (Event_ID, Latin_name) %>% summarise(q.tot.cov = sum(Cover)) %>% ungroup()
 
-  herb5 <- park.herb10 %>% group_by (Event_ID, QuadratID) %>% summarise(q.tot.cov = sum(Cover),
-                                                                      q.sp.rich = sum(Pres)) %>% ungroup()
-  # Total quadrat cover and richness in herb5
+  herb7 <- merge (herb5, quadsamp4, by="Event_ID", all.y=T)
+  herb7$ave.q.cov = (herb7$q.tot.cov/herb7$Quad_Sp_Sample)
 
+  quad.sp.final <- herb7[,c("Location_ID", "Unit_Code", "Plot_Name", "Plot_Number", "X_Coord", "Y_Coord", "Panel",
+                          "Year", "Event_ID", "Event_QAQC", "Cycle", "Quad_Sp_Sample", "ave.q.cov")] %>%
+    arrange(Plot_Name, Year)
 
-  herb6 <- herb5 %>% group_by (Event_ID) %>% summarise (sum.q.cov = sum(q.tot.cov),
-                                                        sum.q.rich = sum(q.sp.rich))
-  herb7 <- merge (herb6, quadsamp4, by="Event_ID", all.y=T)
-  herb7$ave.q.cov = (herb7$sum.q.cov/herb7$Quad_Sp_Sample)
-  herb7$ave.q.rich = (herb7$sum.q.rich/herb7$Quad_Sp_Sample)
-  # Plot-wide Average quadrat cover and richness
-
-  herb8 <- merge(herb7, plot.sp.rich, by="Event_ID", all.x=T)
-  herb8[is.na(herb8)] <- 0
-
-  quads.final <- herb8[,c("Location_ID", "Unit_Code", "Plot_Name", "Plot_Number", "X_Coord", "Y_Coord", "Panel",
-                          "Year", "Event_ID", "Event_QAQC", "Cycle", "Quad_Sp_Sample", "ave.q.cov", "ave.q.rich",
-                          "sum.q.cov", "sum.q.rich", "plot.sp.rich")] %>% arrange(Plot_Name, Year)
-
-  return(data.frame(quads.final))
+  return(data.frame(quad.sp.final))
 
   } # end of function
 
