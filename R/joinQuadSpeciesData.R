@@ -145,7 +145,7 @@ joinQuadSpData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'in
   herb7$ave.q.cov = (herb7$q.tot.cov/herb7$Quad_Sp_Sample)
 
   quad.sp.final <- herb7[,c("Location_ID", "Unit_Code", "Plot_Name", "Plot_Number", "X_Coord", "Y_Coord", "Panel",
-                          "Year", "Event_ID", "Event_QAQC", "Cycle", "Quad_Sp_Sample", "ave.q.cov")] %>%
+                          "Year", "Event_ID", "Event_QAQC", "Cycle", "Quad_Sp_Sample", "Latin_name", "ave.q.cov")] %>%
     arrange(Plot_Name, Year)
 
   return(data.frame(quad.sp.final))
