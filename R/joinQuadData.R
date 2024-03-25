@@ -121,19 +121,19 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inva
 
 
   # Summarize quadrat data
-  park.herb9<-if (speciesType=='native'){filter(park.herb,Nativity=="native")
-  } else if (speciesType=='exotic'){filter(park.herb,Nativity=="exotic")
-  } else if (speciesType=='unknown'){filter(park.herb,Nativity=="Unknown")
-  } else if (speciesType=='invasive'){filter(park.herb,Invasive==TRUE)
+  park.herb9<-if (speciesType=='native'){filter(park.herb8,Nativity=="native")
+  } else if (speciesType=='exotic'){filter(park.herb8,Nativity=="exotic")
+  } else if (speciesType=='unknown'){filter(park.herb8,Nativity=="Unknown")
+  } else if (speciesType=='invasive'){filter(park.herb8,Invasive==TRUE)
   } else if (speciesType=='all'){(park.herb8)
   }
 
-  park.herb10<-if (GrowthForm=='tree'){filter(park.herb,GrowthForm=="tree")
-  } else if (GrowthForm=='shrub'){filter(park.herb,GrowthForm=="shrub")
-  } else if (GrowthForm=='herb'){filter(park.herb,GrowthForm=="herb")
-  } else if (GrowthForm=='gram'){filter(park.herb,GrowthForm=="gram")
-  } else if (GrowthForm=='vine'){filter(park.herb,GrowthForm=="vine")
-  } else if (GrowthForm=='fern'){filter(park.herb,GrowthForm=="fern")
+  park.herb10<-if (GrowthForm=='tree'){filter(park.herb9,GrowthForm=="tree")
+  } else if (GrowthForm=='shrub'){filter(park.herb9,GrowthForm=="shrub")
+  } else if (GrowthForm=='herb'){filter(park.herb9,GrowthForm=="herb")
+  } else if (GrowthForm=='gram'){filter(park.herb9,GrowthForm=="gram")
+  } else if (GrowthForm=='vine'){filter(park.herb9,GrowthForm=="vine")
+  } else if (GrowthForm=='fern'){filter(park.herb9,GrowthForm=="fern")
   } else if (GrowthForm=='all'){(park.herb9)
   }
 
