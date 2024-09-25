@@ -83,7 +83,7 @@ joinLocEvent<-function(park="all", QAQC=FALSE, retired=FALSE, anrevisit=FALSE,
   park.ev4$Year <- as.numeric(park.ev4$Year)
 
   park.plots<- if (output=='short') {park.ev4 %>% select(Location_ID,Event_ID,Unit_Code,
-    Plot_Name, Plot_Number, X_Coord, Y_Coord, Panel, Year, Event_QAQC, Cycle)
+    Plot_Name, Plot_Number, X_Coord, Y_Coord, Panel, Year, Event_QAQC, Cycle, Vegetation_Domain)
   } else if (output=='verbose') {park.ev4}
 
   return(data.frame(park.plots))
