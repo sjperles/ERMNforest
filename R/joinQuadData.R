@@ -116,7 +116,7 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inva
 
 
   # Create final file for selecting and summarizing
-  park.herb8 <- park.herb7[,c("Event_ID","Location_ID", "Unit_Code","Plot_Number","Panel","Year", "Vegetation_Domain",
+  park.herb8 <- park.herb7[,c("Event_ID","Location_ID", "Unit_Code","Plot_Number","Panel","Year",
                           "Plot_Name", "Plant_ID", "QuadratID", "Cover", "Pres", "Latin_name", "Nativity","Invasive","GrowthForm")]
 
 
