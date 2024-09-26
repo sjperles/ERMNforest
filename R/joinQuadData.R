@@ -1,5 +1,5 @@
 #' @include joinLocEvent.R
-#' @title joinQuadData: compiles quadrat species data
+#' @title joinQuadData: compiles quadrat species data by plot
 #'
 #' @importFrom dplyr select filter arrange mutate summarise group_by rename_at
 #' @importFrom magrittr %>%
@@ -159,7 +159,7 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inva
   herb8 <- merge(herb7, plot.sp.rich, by="Event_ID", all.x=T)
   herb8[is.na(herb8)] <- 0
 
-  quads.final <- herb8[,c("Location_ID", "Unit_Code", "Plot_Name", "Plot_Number", "X_Coord", "Y_Coord", "Panel",
+  quads.final <- herb8[,c("Location_ID", "Unit_Code", "Plot_Name", "Plot_Number", "X_Coord", "Y_Coord", "Panel", "Vegetation_Domain",
                           "Year", "Event_ID", "Event_QAQC", "Cycle", "Vegetation_Domain", "Quad_Sp_Sample", "ave.q.cov", "ave.q.rich",
                           "sum.q.cov", "sum.q.rich", "plot.sp.rich")] %>% arrange(Plot_Name, Year)
 
