@@ -116,7 +116,7 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inva
 
 
   # Create final file for selecting and summarizing
-  park.herb8 <- park.herb7[,c("Event_ID","Location_ID", "Unit_Code","Plot_Number","Panel","Year",
+  park.herb8 <- park.herb7[,c("Event_ID","Location_ID", "Unit_Code","Plot_Number","Panel","Year", "Vegetation_Domain",
                           "Plot_Name", "Plant_ID", "QuadratID", "Cover", "Pres", "Latin_name", "Nativity","Invasive","GrowthForm")]
 
 
@@ -160,7 +160,7 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inva
   herb8[is.na(herb8)] <- 0
 
   quads.final <- herb8[,c("Location_ID", "Unit_Code", "Plot_Name", "Plot_Number", "X_Coord", "Y_Coord", "Panel",
-                          "Year", "Event_ID", "Event_QAQC", "Cycle", "Quad_Sp_Sample", "ave.q.cov", "ave.q.rich",
+                          "Year", "Event_ID", "Event_QAQC", "Cycle", "Vegetation_Domain", "Quad_Sp_Sample", "ave.q.cov", "ave.q.rich",
                           "sum.q.cov", "sum.q.rich", "plot.sp.rich")] %>% arrange(Plot_Name, Year)
 
   return(data.frame(quads.final))
