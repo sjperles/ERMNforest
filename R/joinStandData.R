@@ -23,9 +23,9 @@
 # Join stand table
 #------------------------
 joinStandData<-function(park='all', years=2007:2023, QAQC=FALSE,
-                        rejected=FALSE, anrevisit=FALSE, output, ...){
+                        retired=TRUE, anrevisit=FALSE, output, ...){
 
-  park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,rejected = rejected,
+  park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,retired = retired,
                                    anrevisit = anrevisit, output = 'short'))
 
   stand2<-stand %>% select(Event_ID, Stand_Structure_ID, Crown_Closure_ID,  Deer_Browse_Line_ID,

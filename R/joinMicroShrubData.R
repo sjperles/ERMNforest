@@ -29,11 +29,11 @@
 # Joins microplot tables and filters by park, year, and plot/visit type
 #------------------------
 joinMicroShrubData<-function(speciesType = c('all', 'native','exotic'), park='all',
-                             years=2007:2023, QAQC=FALSE, rejected=FALSE, anrevisit=FALSE, output, ...){
+                             years=2007:2023, QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
 
   speciesType<-match.arg(speciesType)
 
-  park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,rejected = rejected,
+  park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,retired = retired,
                                  anrevisit = anrevisit, output = 'short'))
 
   # Prepare the shrub data

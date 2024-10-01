@@ -44,12 +44,12 @@
 joinAddPlotSp<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'invasive'),
                        GrowthForm=c('all', 'tree', 'shrub', 'herb', 'gram', 'fern', 'vine'),
                        park='all',years=2008:2023,
-                       QAQC=FALSE, rejected=FALSE, anrevisit=FALSE, output, ...){
+                       QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
 
   speciesType<-match.arg(speciesType)
   GrowthForm<-match.arg(GrowthForm)
 
-  park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,rejected = rejected,
+  park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,retired = retired,
                                  anrevisit = anrevisit, output = 'short'))
 
 

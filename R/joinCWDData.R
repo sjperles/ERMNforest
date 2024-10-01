@@ -26,11 +26,11 @@
 #------------------------
 # Join CWD table and filters by park, year, and plot/visit type
 #------------------------
-joinCWDData<-function(units=c('ha','acres'), park='all',years=2007:2023, QAQC=FALSE, rejected=FALSE, anrevisit=FALSE, output, ...){
+joinCWDData<-function(units=c('ha','acres'), park='all',years=2007:2023, QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
 
   units<-match.arg(units)
 
-  park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,rejected = rejected,
+  park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,retired = retired,
                                  anrevisit = anrevisit, output = 'short'))
 
 

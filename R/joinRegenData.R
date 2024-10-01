@@ -43,13 +43,13 @@
 # Joins microplot tables and filters by park, year, and plot/visit type
 #------------------------
 joinRegenData<-function(speciesType=c('all', 'native','exotic','invasive'), canopyForm=c('canopy','all'),
-  units=c('micro','ha','acres'), park='all',years=2007:2023, QAQC=FALSE, rejected=FALSE, anrevisit=FALSE, output, ...){
+  units=c('micro','ha','acres'), park='all',years=2007:2023, QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
 
   speciesType<-match.arg(speciesType)
   canopyForm<-match.arg(canopyForm)
   units<-match.arg(units)
 
-  park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,rejected = rejected,
+  park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,retired = retired,
                                  anrevisit = anrevisit, output = 'short'))
 
 # Prepare the seedling data

@@ -26,8 +26,8 @@
 #' \item{TRUE}{Returns all visits, including QAQC visits}}
 #' @param retired Allows you to remove (FALSE) or include (TRUE) retired plots.
 #' \describe{
-#' \item{FALSE}{Default. Only returns plots that are active}
-#' \item{TRUE}{returns all active and retired plots}}
+#' \item{FALSE}{Only returns plots that are active}
+#' \item{TRUE}{Default. returns all active and retired plots}}
 #' @param anrevisit Allows you to remove (FALSE) or include (TRUE) annual revisits from 2008 - 2011.
 #' \describe{
 #' \item{FALSE}{Default. Only returns plots that were sampled on 4 year cycle, does not include annual revisits.}
@@ -51,7 +51,7 @@
 #------------------------
 # Joins tbl_Locations and tbl_Events tables and filters by park, year, and plot/visit type
 #------------------------
-joinLocEvent<-function(park="all", QAQC=FALSE, retired=FALSE, anrevisit=FALSE,
+joinLocEvent<-function(park="all", QAQC=FALSE, retired=TRUE, anrevisit=FALSE,
                        years=2007:2023, output='short', ...){
 
   loc2<-loc %>% mutate(Unit_Code=as.factor(str_sub(Unit_Code,1,4)))

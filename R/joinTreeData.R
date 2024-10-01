@@ -48,13 +48,13 @@
 #------------------------
 joinTreeData<-function(status=c('all', 'live','dead'), speciesType=c('all', 'native','exotic', 'invasive'),
                        canopyPosition = c("all", "canopy"), park='all',
-                       years=2007:2023, QAQC=FALSE, rejected=FALSE, anrevisit=FALSE, output, ...){
+                       years=2007:2023, QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
 
   status<-match.arg(status)
   speciesType<-match.arg(speciesType)
   canopyPosition<-match.arg(canopyPosition)
 
-  park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,rejected = rejected,
+  park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,retired = retired,
                                  anrevisit = anrevisit, output = 'short'))
 
 

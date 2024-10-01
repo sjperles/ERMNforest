@@ -44,12 +44,12 @@
 joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'invasive'),
                        GrowthForm=c('all', 'tree', 'shrub', 'herb', 'gram', 'fern', 'vine'),
                        park='all',years=2008:2023,
-                       QAQC=FALSE, rejected=FALSE, anrevisit=FALSE, output, ...){
+                       QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
 
   speciesType<-match.arg(speciesType)
   GrowthForm<-match.arg(GrowthForm)
 
-  park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,rejected = rejected,
+  park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC, retired = retired,
                                  anrevisit = anrevisit, output = 'short'))
 
 
@@ -159,7 +159,7 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inva
   herb8 <- merge(herb7, plot.sp.rich, by="Event_ID", all.x=T)
   herb8[is.na(herb8)] <- 0
 
-  quads.final <- herb8[,c("Location_ID", "Unit_Code", "Plot_Name", "Plot_Number", "X_Coord", "Y_Coord", "Panel", "Vegetation_Domain",
+  quads.final <- herb8[,c("Location_ID", "Unit_Code", "Plot_Name", "Plot_Number", "X_Coord", "Y_Coord", "Panel",
                           "Year", "Event_ID", "Event_QAQC", "Cycle", "Vegetation_Domain", "Quad_Sp_Sample", "ave.q.cov", "ave.q.rich",
                           "sum.q.cov", "sum.q.rich", "plot.sp.rich")] %>% arrange(Plot_Name, Year)
 
