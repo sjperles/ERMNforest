@@ -19,6 +19,7 @@
 #' \item{"FRHI"}{Friendship Hill NHS only}
 #' \item{"JOFL"}{Johnstown Flood NM only}
 #' \item{"WEPA"}{ALPO, JOFL, FONE, and FRHI only}
+#' \item{"FLNI"}{Flight 93 NM only}
 #' \item{"DEWA"}{Delaware Water Gap NRA only}}
 #' @param QAQC Allows you to remove or include QAQC events.
 #' \describe{

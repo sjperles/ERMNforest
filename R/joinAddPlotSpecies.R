@@ -67,9 +67,10 @@ joinAddPlotSp<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inv
                                                              if_else(Unit_Code == "JOFL",PA_Mt_Nativ,
                                                                      if_else(Unit_Code == "FONE",PA_Mt_Nativ,
                                                                              if_else(Unit_Code == "FRHI",PA_Mt_Nativ,
-                                                                                     if_else(Unit_Code == "NERI", WV_Mt_Nativ,
+                                                                                     if_else(Unit_Code == "FLNI",PA_Mt_Nativ,
+                                                                                          if_else(Unit_Code == "NERI", WV_Mt_Nativ,
                                                                                              if_else(Unit_Code == "BLUE", WV_Mt_Nativ,
-                                                                                                     if_else(Unit_Code == "GARI", WV_Mt_Nativ, "NONE")))))))))
+                                                                                                     if_else(Unit_Code == "GARI", WV_Mt_Nativ, "NONE"))))))))))
 
   addspp5 <- addspp4 %>% mutate (Nativity2 = if_else(Unit_Code == "DEWA" & is.na(Nativity1),NJ_Pd_Nativ,Nativity1))
   addspp6 <- addspp5 %>% mutate (Nativity3 = if_else(Unit_Code == "DEWA" & is.na(Nativity2),PA_Mt_Nativ,Nativity2))
