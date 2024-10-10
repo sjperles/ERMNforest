@@ -102,9 +102,10 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inva
   park.herb3a <- park.herb3 %>% mutate (Nativity2 = if_else(Unit_Code == "DEWA" & is.na(Nativity1),NJ_Pd_Nativ,Nativity1))
   park.herb4 <- park.herb3a %>% mutate (Nativity3 = if_else(Unit_Code == "DEWA" & is.na(Nativity2),PA_Mt_Nativ,Nativity2))
 
-  park.herb4$Nativity3[is.na(park.herb4$Nativity3)] <- "Unknown"
+  park.herb4$Nativity3[is.na(park.herb4$Nativity3)] <- "unknown"
   park.herb5 <- park.herb4 %>% mutate (Nativity = if_else(Nativity3 == "maybe exotic","exotic",
-                                                          if_else(Nativity3 == "maybe native", "native",Nativity3)))
+                                                          if_else(Nativity3 == "mixed","unknown",
+                                                              if_else(Nativity3 == "maybe native", "native",Nativity3))))
 
 
   # Create single column for growth form
@@ -113,7 +114,7 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inva
                                                                     if_else(Herbaceous == TRUE, "herb",
                                                                             if_else(Vine == TRUE, "vine",
                                                                                     if_else(Graminoid == TRUE, "gram",
-                                                                                            if_else(Fern == TRUE, "fern","Unknown")))))))
+                                                                                            if_else(Fern == TRUE, "fern","unknown")))))))
 
 
   # Create final file for selecting and summarizing
@@ -124,7 +125,7 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inva
   # Summarize quadrat data
   park.herb9<-if (speciesType=='native'){filter(park.herb8,Nativity=="native")
   } else if (speciesType=='exotic'){filter(park.herb8,Nativity=="exotic")
-  } else if (speciesType=='unknown'){filter(park.herb8,Nativity=="Unknown")
+  } else if (speciesType=='unknown'){filter(park.herb8,Nativity=="unknown")
   } else if (speciesType=='invasive'){filter(park.herb8,Invasive==TRUE)
   } else if (speciesType=='all'){(park.herb8)
   }

@@ -75,9 +75,10 @@ joinAddPlotSp<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inv
   addspp5 <- addspp4 %>% mutate (Nativity2 = if_else(Unit_Code == "DEWA" & is.na(Nativity1),NJ_Pd_Nativ,Nativity1))
   addspp6 <- addspp5 %>% mutate (Nativity3 = if_else(Unit_Code == "DEWA" & is.na(Nativity2),PA_Mt_Nativ,Nativity2))
 
-  addspp6$Nativity3[is.na(addspp6$Nativity3)] <- "Unknown"
+  addspp6$Nativity3[is.na(addspp6$Nativity3)] <- "unknown"
   addspp7 <- addspp6 %>% mutate (Nativity = if_else(Nativity3 == "maybe exotic","exotic",
-                                                    if_else(Nativity3 == "maybe native", "native",Nativity3)))
+                                                    if_else(Nativity3 == "mixed","unknown",
+                                                        if_else(Nativity3 == "maybe native", "native",Nativity3))))
 
 
   # Create single column for growth form
@@ -86,7 +87,7 @@ joinAddPlotSp<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inv
                                                               if_else(Herbaceous == TRUE, "herb",
                                                                       if_else(Vine == TRUE, "vine",
                                                                               if_else(Graminoid == TRUE, "gram",
-                                                                                      if_else(Fern == TRUE, "fern","Unknown")))))))
+                                                                                      if_else(Fern == TRUE, "fern","unknown")))))))
 
   # Create final file for selecting and summarizing
   plot.addspp <- addspp8[,c("Event_ID","Location_ID", "Unit_Code","Plot_Number","Plot_Name","Panel","Year",
@@ -96,7 +97,7 @@ joinAddPlotSp<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inv
     # Summarize additional plot species data
   plot.addspp<-if (speciesType=='native'){filter(plot.addspp,Nativity=="native")
   } else if (speciesType=='exotic'){filter(plot.addspp,Nativity=="exotic")
-  } else if (speciesType=='unknown'){filter(plot.addspp,Nativity=="Unknown")
+  } else if (speciesType=='unknown'){filter(plot.addspp,Nativity=="unknown")
   } else if (speciesType=='invasive'){filter(plot.addspp,Invasive==TRUE)
   } else if (speciesType=='all'){(plot.addspp)
   }

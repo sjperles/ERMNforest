@@ -93,9 +93,10 @@ joinRegenSpData<-function(speciesType=c('all', 'native','exotic','invasive'), ca
   regen5 <- regen4 %>% mutate (Nativity2 = if_else(Unit_Code == "DEWA" & is.na(Nativity1),NJ_Pd_Nativ,Nativity1))
   regen6 <- regen5 %>% mutate (Nativity3 = if_else(Unit_Code == "DEWA" & is.na(Nativity2),PA_Mt_Nativ,Nativity2))
 
-  regen6$Nativity3[is.na(regen6$Nativity3)] <- "Unknown"
+  regen6$Nativity3[is.na(regen6$Nativity3)] <- "unknown"
   regen7 <- regen6 %>% mutate (Nativity = if_else(Nativity3 == "maybe exotic","exotic",
-                                                  if_else(Nativity3 == "maybe native", "native",Nativity3)))
+                                                  if_else(Nativity3 == "mixed","unknown",
+                                                      if_else(Nativity3 == "maybe native", "native",Nativity3))))
 
 
   regen8<-if(canopyForm=='canopy'){filter(regen7, Canopy==TRUE)

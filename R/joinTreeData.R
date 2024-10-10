@@ -81,9 +81,10 @@ joinTreeData<-function(status=c('all', 'live','dead'), speciesType=c('all', 'nat
   tree3n2 <- tree3n1 %>% mutate (Nativity2 = if_else(Unit_Code == "DEWA" & is.na(Nativity1),NJ_Pd_Nativ,Nativity1))
   tree3n3 <- tree3n2 %>% mutate (Nativity3 = if_else(Unit_Code == "DEWA" & is.na(Nativity2),PA_Mt_Nativ,Nativity2))
 
-  tree3n3$Nativity3[is.na(tree3n3$Nativity3)] <- "Unknown"
+  tree3n3$Nativity3[is.na(tree3n3$Nativity3)] <- "unknown"
   tree3N <- tree3n3 %>% mutate (Nativity = if_else(Nativity3 == "maybe exotic","exotic",
-                                                   if_else(Nativity3 == "maybe native", "native",Nativity3)))
+                                                   if_else(Nativity3 == "mixed","unknown",
+                                                      if_else(Nativity3 == "maybe native", "native",Nativity3))))
 
   tree4a <- tree3N[,c("Unit_Code","Plot_Name","Plot_Number","X_Coord","Y_Coord","Panel","Year","Event_QAQC","Cycle",
                       "Tree_Number","DBH","Status_ID","Crown_Class_ID","Latin_name", "Invasive","Nativity","Canopy")]
