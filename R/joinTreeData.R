@@ -90,7 +90,7 @@ joinTreeData<-function(status=c('all', 'live','dead'), speciesType=c('all', 'nat
                       "Tree_Number","DBH","Status_ID","Crown_Class_ID","Decay_Class_ID","Latin_name", "Invasive","Nativity","Canopy")]
 
   tree4 <- tree4a %>% mutate(BA_cm2 = ifelse(DBH<999997.0,(((DBH / 2)^2)*3.1415926535),0),
-                             pres = ifelse(DBH<999997.0,1,0))
+                              pres = ifelse((Status_ID==1 | Status_ID==2),1,0))
 
 
   tree5<- if (status=='live') {filter(tree4,Status_ID==1)
