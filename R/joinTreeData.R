@@ -6,6 +6,39 @@
 #'
 #' @description This function combines location and event-level Tree data. Must run importData first.
 #'
+#' @param park Combine data from all parks or one park at a time. Acceptable options are:
+#' \describe{
+#' \item{"all"}{Includes all parks in the network}
+#' \item{"NERI"}{New River Gorge NPP only}
+#' \item{"GARI"}{Gauley River NRA NHP only}
+#' \item{"BLUE"}{Bluestone NSR only}
+#' \item{"WV"}{NERI, GARI, and BLUE only}
+#' \item{"ALPO"}{Allegheny Portage Railroad NHS only}
+#' \item{"FONE"}{Fort Necessity NB only}
+#' \item{"FRHI"}{Friendship Hill NHS only}
+#' \item{"JOFL"}{Johnstown Flood NM only}
+#' \item{"WEPA"}{ALPO, JOFL, FONE, and FRHI only}
+#' \item{"FLNI"}{Flight 93 NM only}
+#' \item{"DEWA"}{Delaware Water Gap NRA only}}
+#'
+#' @param QAQC Allows you to remove or include QAQC events.
+#' \describe{
+#' \item{FALSE}{Default. Only returns visits that are not QAQC visits}
+#' \item{TRUE}{Returns all visits, including QAQC visits}}
+#'
+#' @param retired Allows you to remove (FALSE) or include (TRUE) retired plots.
+#' \describe{
+#' \item{FALSE}{Only returns plots that are active}
+#' \item{TRUE}{Default. returns all active and retired plots}}
+#'
+#' @param anrevisit Allows you to remove (FALSE) or include (TRUE) annual revisits from 2008 - 2011.
+#' \describe{
+#' \item{FALSE}{Default. Only returns plots that were sampled on 4 year cycle, does not include annual revisits.}
+#' \item{TRUE}{returns all records}}
+#'
+#' @param years Allows you to select individual years from 2007 to 2023. Default is all years.
+#' If more than one year is selected, specify by c(2007:2018), for example.
+#'
 #' @param status Filter by live, dead, or all. Acceptable options are:
 #' \describe{
 #' \item{"all"}{Includes all standing trees}
@@ -27,10 +60,16 @@
 #' \item{"canopy"}{Returns only species that are considered native canopy-forming trees as defined in Canopy in tlu_Plants.}
 #' }
 #'
+#'@param canopyForm Allows you to filter native trees that are canopy-forming species
+#' \describe{
+#' \item{"all"}{Returns all canopy positions}
+#' \item{"canopy"}{Returns only species that are considered native canopy-forming trees as defined in Canopy in tlu_Plants.}
+#' }
 #'
 #' @return returns a dataframe with plot-level and visit-level tree data
 #'
 #' @examples
+#' \dontrun{
 #' importData()
 #' # compile tree data for live trees only in most recent survey in all parks
 #' live_trees <- joinTreeData(status = 'live', years = 2016:2022)
@@ -40,6 +79,7 @@
 #'
 #' # compile exotic trees in NERI in all years
 #' NERI_exotic <- joinTreeData(park = 'NERI', speciesType = 'exotic')
+#' }
 #'
 #' @export
 #'
@@ -50,9 +90,12 @@ joinTreeData<-function(status=c('all', 'live','dead'), speciesType=c('all', 'nat
                        canopyPosition = c("all", "canopy"), park='all',
                        years=2007:2023, QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
 
-  status<-match.arg(status)
-  speciesType<-match.arg(speciesType)
-  canopyPosition<-match.arg(canopyPosition)
+  park <- match.arg(park, several.ok = TRUE,
+                    c("all", "NERI", "GARI", "BLUE", "WV", "ALPO","FONE", "FRHI", "JOFL", "WEPA", "FLNI", "DEWA"))
+  status <- match.arg(status)
+  speciesType <- match.arg(speciesType)
+  canopyPosition <- match.arg(canopyPosition)
+  canopyForm <- match.arg(canopyForm)
 
   park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,retired = retired,
                                  anrevisit = anrevisit, output = 'short'))
@@ -104,10 +147,14 @@ joinTreeData<-function(status=c('all', 'live','dead'), speciesType=c('all', 'nat
   } else if (speciesType=='all'){(tree5)
   }
 
-  tree7<- if (canopyPosition=='canopy'){filter(tree6,Canopy==TRUE)
+  tree7<- if (canopyPosition=='canopy'){filter(tree6,Crown_Class_ID==2 | Crown_Class_ID==3 | Crown_Class_ID==4)
   } else if (canopyPosition=='all'){(tree6)
   }
 
-  return(data.frame(tree7))
+  tree8<- if (canopyForm=='canopy'){filter(tree7,Canopy==TRUE)
+  } else if (canopyForm=='all'){(tree7)
+  }
+
+  return(data.frame(tree8))
 } # end of function
 

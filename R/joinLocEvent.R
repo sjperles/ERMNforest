@@ -21,19 +21,22 @@
 #' \item{"WEPA"}{ALPO, JOFL, FONE, and FRHI only}
 #' \item{"FLNI"}{Flight 93 NM only}
 #' \item{"DEWA"}{Delaware Water Gap NRA only}}
+#'
 #' @param QAQC Allows you to remove or include QAQC events.
 #' \describe{
 #' \item{FALSE}{Default. Only returns visits that are not QAQC visits}
 #' \item{TRUE}{Returns all visits, including QAQC visits}}
+#'
 #' @param retired Allows you to remove (FALSE) or include (TRUE) retired plots.
 #' \describe{
 #' \item{FALSE}{Only returns plots that are active}
 #' \item{TRUE}{Default. returns all active and retired plots}}
+#'
 #' @param anrevisit Allows you to remove (FALSE) or include (TRUE) annual revisits from 2008 - 2011.
 #' \describe{
 #' \item{FALSE}{Default. Only returns plots that were sampled on 4 year cycle, does not include annual revisits.}
 #' \item{TRUE}{returns all records}}
-#' }
+#'
 #' @param years Allows you to select individual years from 2007 to 2023. Default is all years.
 #' If more than one year is selected, specify by c(2007:2018), for example.
 #'
@@ -78,7 +81,7 @@ joinLocEvent<-function(park="all", QAQC=FALSE, retired=TRUE, anrevisit=FALSE,
 
   park.ev3<- if (anrevisit==FALSE) {filter(park.ev1, Panel != "X")
   } else if (anrevisit==TRUE) {(park.ev1)
-  } else {stop("QAQC must be TRUE or FALSE")}
+  } else {stop("anrevisit must be TRUE or FALSE")}
 
   park.ev4 <- park.ev3 %>% filter(Year %in% years) %>% droplevels()
   park.ev4$Year <- as.numeric(park.ev4$Year)
