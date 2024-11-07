@@ -129,7 +129,7 @@ joinTreeData<-function(status=c('all', 'live','dead'), speciesType=c('all', 'nat
                                                    if_else(Nativity3 == "mixed","unknown",
                                                       if_else(Nativity3 == "maybe native", "native",Nativity3))))
 
-  tree4a <- tree3N[,c("Unit_Code","Plot_Name","Plot_Number","X_Coord","Y_Coord","Panel","Year","Event_QAQC","Cycle",
+  tree4a <- tree3N[,c("Event_ID","Unit_Code","Plot_Name","Plot_Number","X_Coord","Y_Coord","Panel","Year","Event_QAQC","Cycle",
                       "Tree_Number","DBH","Status_ID","Crown_Class_ID","Decay_Class_ID","Latin_name", "Invasive","Nativity","Canopy")]
 
   tree4 <- tree4a %>% mutate(BA_cm2 = ifelse(DBH<999997.0,(((DBH / 2)^2)*3.1415926535),0),
