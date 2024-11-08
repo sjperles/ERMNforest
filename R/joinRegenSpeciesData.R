@@ -78,6 +78,13 @@
 joinRegenSpData<-function(speciesType=c('all', 'native','exotic','invasive'), canopyForm=c('all','canopy'),
   units=c('micro','ha','acres'), park='all',years=2007:2023, QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
 
+  park <- match.arg(park)
+  years <- match.arg(years)
+  QAQC <- match.arg(QAQC)
+  retired <- match.arg(retired)
+  anrevisit <- match.arg(anrevisit)
+  output <- match.arg(output)
+  status <- match.arg(status)
   speciesType<-match.arg(speciesType)
   canopyForm<-match.arg(canopyForm)
   units<-match.arg(units)
