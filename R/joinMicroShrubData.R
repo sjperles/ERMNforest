@@ -6,6 +6,39 @@
 #'
 #' @description This function combines shrub percent cover data from microplots. Must run importData first.
 #'
+#' @param park Combine data from all parks or one park at a time. Acceptable options are:
+#' \describe{
+#' \item{"all"}{Includes all parks in the network}
+#' \item{"NERI"}{New River Gorge NPP only}
+#' \item{"GARI"}{Gauley River NRA NHP only}
+#' \item{"BLUE"}{Bluestone NSR only}
+#' \item{"WV"}{NERI, GARI, and BLUE only}
+#' \item{"ALPO"}{Allegheny Portage Railroad NHS only}
+#' \item{"FONE"}{Fort Necessity NB only}
+#' \item{"FRHI"}{Friendship Hill NHS only}
+#' \item{"JOFL"}{Johnstown Flood NM only}
+#' \item{"WEPA"}{ALPO, JOFL, FONE, and FRHI only}
+#' \item{"FLNI"}{Flight 93 NM only}
+#' \item{"DEWA"}{Delaware Water Gap NRA only}}
+#'
+#' @param QAQC Allows you to remove or include QAQC events.
+#' \describe{
+#' \item{FALSE}{Default. Only returns visits that are not QAQC visits}
+#' \item{TRUE}{Returns all visits, including QAQC visits}}
+#'
+#' @param retired Allows you to remove (FALSE) or include (TRUE) retired plots.
+#' \describe{
+#' \item{FALSE}{Only returns plots that are active}
+#' \item{TRUE}{Default. returns all active and retired plots}}
+#'
+#' @param anrevisit Allows you to remove (FALSE) or include (TRUE) annual revisits from 2008 - 2011.
+#' \describe{
+#' \item{FALSE}{Default. Only returns plots that were sampled on 4 year cycle, does not include annual revisits.}
+#' \item{TRUE}{returns all records}}
+#'
+#' @param years Allows you to select individual years from 2007 to 2023. Default is all years.
+#' If more than one year is selected, specify by c(2007:2018), for example.
+#'
 #' @param speciesType Allows you to filter on native, exotic or include all species.
 #' \describe{
 #' \item{"all"}{Default. Returns all species.}
@@ -31,6 +64,11 @@
 joinMicroShrubData<-function(speciesType = c('all', 'native','exotic'), park='all',
                              years=2007:2023, QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
 
+  park <- match.arg(park)
+  QAQC <- match.arg(QAQC)
+  retired <- match.arg(retired)
+  anrevisit <- match.arg(anrevisit)
+  output <- match.arg(output)
   speciesType<-match.arg(speciesType)
 
   park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,retired = retired,

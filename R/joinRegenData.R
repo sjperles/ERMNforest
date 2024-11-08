@@ -40,7 +40,7 @@
 #'
 #' @param years Allows you to select individual years from 2007 to 2023. Default is all years.
 #' If more than one year is selected, specify by c(2007:2018), for example.
-
+#'
 #' @param speciesType Allows you to filter on native, exotic or include all species.
 #' \describe{
 #' \item{"all"}{Default. Returns all species.}
@@ -80,7 +80,6 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic','invasive'), cano
   units=c('micro','ha','acres'), park='all',years=2007:2023, QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
 
   park <- match.arg(park)
-  years <- match.arg(years)
   QAQC <- match.arg(QAQC)
   retired <- match.arg(retired)
   anrevisit <- match.arg(anrevisit)
