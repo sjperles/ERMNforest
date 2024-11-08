@@ -65,10 +65,6 @@ joinMicroShrubData<-function(speciesType = c('all', 'native','exotic'), park='al
                              years=2007:2023, QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
 
   park <- match.arg(park)
-  QAQC <- match.arg(QAQC)
-  retired <- match.arg(retired)
-  anrevisit <- match.arg(anrevisit)
-  output <- match.arg(output)
   speciesType<-match.arg(speciesType)
 
   park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,retired = retired,

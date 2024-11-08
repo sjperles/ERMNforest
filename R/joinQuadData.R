@@ -80,10 +80,6 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inva
                        QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
 
   park <- match.arg(park)
-  QAQC <- match.arg(QAQC)
-  retired <- match.arg(retired)
-  anrevisit <- match.arg(anrevisit)
-  output <- match.arg(output)
   speciesType<-match.arg(speciesType)
   GrowthForm<-match.arg(GrowthForm)
 

@@ -62,10 +62,6 @@
 joinCWDData<-function(units=c('ha','acres'), park='all',years=2007:2023, QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
 
   park <- match.arg(park)
-  QAQC <- match.arg(QAQC)
-  retired <- match.arg(retired)
-  anrevisit <- match.arg(anrevisit)
-  output <- match.arg(output)
   units<-match.arg(units)
 
   park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,retired = retired,
