@@ -92,7 +92,7 @@ joinTreeConditions <- function(park='all', years=2007:2024, QAQC=FALSE, retired=
                                status = c('all', 'live', 'dead'),
                                speciesType = c('all', 'native','exotic', 'invasive'),
                                canopyPosition = c("all", "canopy"),
-                               canopyForming = c("all", "canopy"), ){
+                               canopyForming = c("all", "canopy"), output, ...){
 
   # Match args and class
   park <- match.arg(park)
