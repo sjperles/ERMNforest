@@ -56,7 +56,7 @@
 # Joins tbl_Locations and tbl_Events tables and filters by park, year, and plot/visit type
 #------------------------
 joinLocEvent<-function(park="all", QAQC=FALSE, retired=TRUE, anrevisit=FALSE,
-                       years=2007:2023, output='short', ...){
+                       years=2007:2024, output='short', ...){
 
   loc2<-loc %>% mutate(Unit_Code=as.factor(str_sub(Unit_Code,1,4)))
   loc3<-droplevels(loc2[,c("Location_ID","Unit_Code","X_Coord","Y_Coord","Lat_WGS84", "Long_WGS84", "Plot_Number","Status")])

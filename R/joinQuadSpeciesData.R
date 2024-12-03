@@ -76,7 +76,7 @@
 #------------------------
 joinQuadSpData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'invasive'),
                        GrowthForm=c('all', 'tree', 'shrub', 'herb', 'gram', 'fern', 'vine'),
-                       park='all',years=2008:2023,
+                       park='all',years=2008:2024,
                        QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
 
   park <- match.arg(park)

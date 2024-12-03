@@ -76,7 +76,7 @@
 # Joins microplot tables and filters by park, year, and plot/visit type, summarizes regeneration data by species
 #------------------------
 joinRegenSpData<-function(speciesType=c('all', 'native','exotic','invasive'), canopyForm=c('all','canopy'),
-  units=c('micro','ha','acres'), park='all',years=2007:2023, QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
+  units=c('micro','ha','acres'), park='all',years=2007:2024, QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
 
   park <- match.arg(park)
   status <- match.arg(status)

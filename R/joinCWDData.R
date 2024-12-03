@@ -59,7 +59,7 @@
 #------------------------
 # Join CWD table and filters by park, year, and plot/visit type
 #------------------------
-joinCWDData<-function(units=c('ha','acres'), park='all',years=2007:2023, QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
+joinCWDData<-function(units=c('ha','acres'), park='all',years=2007:2024, QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
 
   park <- match.arg(park)
   units<-match.arg(units)

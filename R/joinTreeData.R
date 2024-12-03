@@ -88,7 +88,7 @@
 #------------------------
 joinTreeData<-function(status=c('all', 'live','dead'), speciesType=c('all', 'native','exotic', 'invasive'),
                        canopyPosition = c("all", "canopy"), canopyForm = c("all", "canopy"), park='all',
-                       years=2007:2023, QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
+                       years=2007:2024, QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
 
   park <- match.arg(park)
   status <- match.arg(status)
