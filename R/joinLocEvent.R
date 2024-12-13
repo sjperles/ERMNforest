@@ -55,7 +55,8 @@
 #------------------------
 # Joins tbl_Locations and tbl_Events tables and filters by park, year, and plot/visit type
 #------------------------
-joinLocEvent<-function(park="all", QAQC=FALSE, retired=TRUE, anrevisit=FALSE,
+joinLocEvent<-function(park=c('all', 'NERI', 'GARI','BLUE','WV','ALPO','FONE','FRHI','FONE','FLNI','JOFL','WEPA','DEWA'),
+                       QAQC=FALSE, retired=TRUE, anrevisit=FALSE,
                        years=2007:2024, output='short', ...){
 
   loc2<-loc %>% mutate(Unit_Code=as.factor(str_sub(Unit_Code,1,4)))

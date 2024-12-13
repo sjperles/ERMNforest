@@ -55,7 +55,8 @@
 #------------------------
 # Join stand table
 #------------------------
-joinStandData<-function(park='all', years=2007:2024, QAQC=FALSE,
+joinStandData<-function(park=c('all', 'NERI', 'GARI','BLUE','WV','ALPO','FONE','FRHI','FONE','FLNI','JOFL','WEPA','DEWA'),
+                        years=2007:2024, QAQC=FALSE,
                         retired=TRUE, anrevisit=FALSE, output, ...){
 
   park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,retired = retired,

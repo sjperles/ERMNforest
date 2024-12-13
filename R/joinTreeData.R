@@ -87,7 +87,8 @@
 # Joins tbl_Trees and tbl_Tree_Data tables and filters by park, year, and plot/visit type
 #------------------------
 joinTreeData<-function(status=c('all', 'live','dead'), speciesType=c('all', 'native','exotic', 'invasive'),
-                       canopyPosition = c("all", "canopy"), canopyForm = c("all", "canopy"), park='all',
+                       canopyPosition = c("all", "canopy"), canopyForm = c("all", "canopy"),
+                       park=c('all', 'NERI', 'GARI','BLUE','WV','ALPO','FONE','FRHI','FONE','FLNI','JOFL','WEPA','DEWA'),
                        years=2007:2024, QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
 
   park <- match.arg(park)
