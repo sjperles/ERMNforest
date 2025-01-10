@@ -147,7 +147,7 @@ joinAddPlotSp<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inv
 
 
   # Summarizing additional plot species data
-  plot.addsp.rich <- plot.addspp %>% group_by (Unit_Code,Plot_Number,Plot_Name,Panel,Year) %>%
+  plot.addsp.rich <- plot.addspp %>% group_by (Event_ID,Unit_Code,Plot_Number,Plot_Name,Panel,Year) %>%
     summarise(plot.add.rich = sum(Pres)) %>% arrange(Plot_Name, Year)
 
   return(data.frame(plot.addsp.rich))
