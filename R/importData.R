@@ -42,7 +42,7 @@ importData<- function(type=c('DSN','file'), odbc='ERMNVeg', path=NA,
   # set up dataframe linking object name for global environment and table name in access
   objectnames<-c("loc", "parktbl", "event", "treedata", "trees", "treecond", "treefcond","tlutreecond", "tlufolcond",
                  "cwd", "cwdts", "plants", "saps", "micro", "sdlg", "shrub", "quadchr", "quadchrtlu", "quads", "quadind",
-                 "addspp", "stand", "stdtlu", "disturb", "disttlu", "disttlutc")
+                 "addspp", "stand", "stdtlu", "disturb", "disttlu", "disttlutc", "slframe", "slhoriz")
 
   tablenames<-c("tbl_Locations", "tlu_Parks", "tbl_Events", "tbl_Tree_Data", "tbl_Trees", "tbl_Tree_Data_Tree_Conditions",
                 "tbl_Tree_Data_Foliage_Conditions","tlu_Tree_Conditions", "tlu_Foliage_Conditions",
