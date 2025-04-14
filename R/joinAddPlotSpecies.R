@@ -36,7 +36,7 @@
 #' \item{FALSE}{Default. Only returns plots that were sampled on 4 year cycle, does not include annual revisits.}
 #' \item{TRUE}{returns all records}}
 #'
-#' @param years Allows you to select individual years from 2007 to 2023. Default is all years.
+#' @param years Allows you to select individual years from 2007 to 2024. Default is all years.
 #' If more than one year is selected, specify by c(2007:2018), for example.
 #'
 #' @param speciesType Allows you to filter on native, exotic or include all species.
