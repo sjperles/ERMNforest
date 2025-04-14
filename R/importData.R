@@ -50,7 +50,7 @@ importData<- function(type=c('DSN','file'), odbc='ERMNVeg', path=NA,
                 "tbl_Microplot_Characterization_Data", "tbl_Microplot_Seedling_Data", "tbl_Microplot_Shrub_Data",
                 "tbl_Quadrat_Character_Data", "tlu_Quadrats", "tbl_Quadrat_Species_Data", "tbl_Quadrat_Indicator_Data",
                 "tbl_Plot_Additional_Species", "tbl_Stand_Data", "tlu_Stand_Structures", "tbl_Disturbances",
-                "tlu_Disturbance_Codes", "tlu_Disturbance_Threshold_Codes", "tbl_Soil_Samples_LabResults", "tbl_Soil_Samples")
+                "tlu_Disturbance_Codes", "tlu_Disturbance_Threshold_Codes", "tbl_Soil_Frames", "tbl_Soil_Horizons")
 
   namesdf<-data.frame(cbind(objectnames,tablenames))
 
@@ -130,9 +130,9 @@ importData<- function(type=c('DSN','file'), odbc='ERMNVeg', path=NA,
   setTxtProgressBar(pb,25)
   assign("disttlutc", DBI::dbReadTable(db,"tlu_Disturbance_Threshold_Codes"),envir=.GlobalEnv)
   setTxtProgressBar(pb,26)
-  assign("soil", DBI::dbReadTable(db,"tbl_Soil_Samples_LabResults"),envir=.GlobalEnv)
+  assign("slframe", DBI::dbReadTable(db,"tbl_Soil_Frames"),envir=.GlobalEnv)
   setTxtProgressBar(pb,27)
-  assign("samples", DBI::dbReadTable(db,"tbl_Soil_Samples"),envir=.GlobalEnv)
+  assign("slhoriz", DBI::dbReadTable(db,"tbl_Soil_Horizons"),envir=.GlobalEnv)
   setTxtProgressBar(pb,28)
   }
 
