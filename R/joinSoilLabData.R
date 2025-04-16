@@ -59,7 +59,7 @@
 #' \dontrun{
 #' importData() #imports using default odbc
 #'# join only O horizon data for most recent cycle in ACAD.
-#' soil_DEWA_O <- joinSoilLabData(park = 'DEWA', years=c(2007:2010), layers = 'O')
+#' soil_DEWA_O <- joinSoilLabData(park = 'DEWA', years=c(2007:2010), layer = 'O')
 #'}
 #' @export
 #'
@@ -70,12 +70,12 @@ joinSoilLabData <- function( park=c('all', 'NERI', 'GARI','BLUE','WV','ALPO','FO
                              years=2007:2024,QAQC=FALSE, retired=TRUE, anrevisit=FALSE, layer = c("all", "O", "A")){
 
   # Match args and class
-  park <- match.arg(park, several.ok = TRUE,
-                    c("all", "NERI", "GARI","BLUE","WV","ALPO","FONE","FRHI","FONE","FLNI","JOFL","WEPA","DEWA"))
-  QAQC <- match.arg(QAQC)
-  retired <- match.arg(retired)
-  anrevisit <- match.arg(anrevisit)
+  park <- match.arg(park)
   layer <- match.arg(layer)
+
+  park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,retired = retired,
+                                 anrevisit = anrevisit, output = 'short'))
+
 
 
   # Identify plots where soil was sampled
