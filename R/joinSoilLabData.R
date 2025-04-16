@@ -84,10 +84,14 @@ joinSoilLabData <- function( park=c('all', 'NERI', 'GARI','BLUE','WV','ALPO','FO
 
   # Soil Chemistry Variables
   slhoriz1 <- subset(slhoriz, Horizon_Collected == TRUE)
-  slhoriz2 <- slhoriz1 %>% mutate_at(c('pH', 'LOI', 'TN', 'TC', 'Ca', 'K', 'Mg', 'P', 'Al',
+
+  slhoriz2 <- slhoriz1 %>% mutate_at(c('LOI', 'TN', 'TC', 'Ca', 'K', 'Mg', 'P', 'Al',
+                                       'Fe', 'Mn', 'Na', 'Zn', 'acidity','ECEC'), as.factor)
+
+  slhoriz3 <- slhoriz2 %>% mutate_at(c('LOI', 'TN', 'TC', 'Ca', 'K', 'Mg', 'P', 'Al',
                                        'Fe', 'Mn', 'Na', 'Zn', 'acidity','ECEC'), as.numeric)
 
-  schem1 <- merge(slframe[,c("Event_ID","Soil_Frame_ID","Frame_Number")],slhoriz2, by="Soil_Frame_ID", all.x = T, all.y=T)
+  schem1 <- merge(slframe[,c("Event_ID","Soil_Frame_ID","Frame_Number")],slhoriz3, by="Soil_Frame_ID", all.x = T, all.y=T)
   schem2 <- subset(schem1, !is.na(Soil_Horizon_ID)) # remove three soil frames where no soil was collected
   schem2$Soil_Collect <- 1
   schem3 <- schem2 %>% mutate (Analysis_Horiz = case_when(Horizon=="B" ~ "B",
