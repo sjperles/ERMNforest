@@ -6,10 +6,8 @@
 #'
 #' @title joinSoilLabData: compile and QC soil chemistry data by horizon.
 #'
-#' @description This function verifies whether O and A horizons were named corrected based on % Total Carbon (O = TC >= 20%).
-#' For duplicate horizons on a plot, chemistry variables are corrected using weighted averages, with sample depth
-#' as the weight. Must run importData first. Note that Earthworms are summarized in joinStandData(). Only works for complete
-#' visits and plots that haven't been abandoned. Note that data starts at 2007 because 2006 methods were pretty different.
+#' @description This function summarizes soil chemistry variables by horizon, average across three sample frames within
+#' a plot. Also handles NAs in soil chemistry variables. Must run importData first.
 #'
 #' @param park Combine data from all parks or one or more parks at a time. Valid inputs:
 #' \describe{
@@ -50,10 +48,8 @@
 #' \item{"O"}{Return only samples from the O horizon.}
 #' \item{"A"}{Return only samples from the A horizon.}}
 #'
-#'
 #' @return returns a dataframe containing each plot and visit with soil chemistry data for each horizon on a plot
-#' Plots that weren't sampled during a given cycle are not returned. Horizon depths are averaged across samples.
-#' Note that horizons that were combined after lab QC may be > 10 cm deep.
+#' Plots that weren't sampled during a given cycle are not returned.
 #'
 #' @examples
 #' \dontrun{
@@ -149,7 +145,8 @@ joinSoilLabData <- function( park=c('all', 'NERI', 'GARI','BLUE','WV','ALPO','FO
                                  AlSat = ifelse(is.na(ECEC.ave), NA_real_, ((Al_meq)/ECEC.ave)*100)) %>%
     select (-c(Ca.ave, K.ave, Mg.ave, P.ave, Al.ave, Fe.ave, Mn.ave, Na.ave, Zn.ave))
 
-  plot.soil <- merge(soil.plots,soil_chem, by= "Event_ID", all.x=T, all.y=T) %>% arrange(Plot_Name,Analysis_Horiz)
+  plot.soil1 <- merge(soil.plots,soil_chem, by= "Event_ID", all.x=T, all.y=T) %>% arrange(Plot_Name,Analysis_Horiz)
+  plot.soil <- subset(plot.soil1, !is.na(Location_ID))
 
 
   soil.final<-if (layer=='O'){filter(plot.soil,Analysis_Horiz=="O")
