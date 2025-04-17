@@ -4,7 +4,7 @@
 #' @importFrom magrittr %>%
 #' @importFrom tidyr pivot_wider
 #'
-#' @title joinSoilLitterData: compile soil litter data.
+#' @title joinLitterData: compile soil litter data.
 #'
 #' @description This function compiles data on leaf litter collected during soil sampling. Must run importData first.
 #'
@@ -46,14 +46,14 @@
 #' @examples
 #' \dontrun{
 #' importData() #default imports
-#' litter_NERI <- joinSoilLitterData(park = 'NERI', from = 2014, to = 2017)
+#' litter_NERI <- joinLitterData(park = 'NERI', from = 2014, to = 2017)
 #'}
 #' @export
 #'
 #------------------------
-# Join soil sample data
+# Join litter data
 #------------------------
-joinSoilSampleData <- function(park=c('all', 'NERI', 'GARI','BLUE','WV','ALPO','FONE','FRHI','FONE','FLNI','JOFL','WEPA','DEWA'),
+joinLitterData <- function(park=c('all', 'NERI', 'GARI','BLUE','WV','ALPO','FONE','FRHI','FONE','FLNI','JOFL','WEPA','DEWA'),
                                years=2007:2024,QAQC=FALSE, retired=TRUE, anrevisit=FALSE){
 
     # Match args and class
