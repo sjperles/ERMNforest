@@ -84,11 +84,28 @@ joinSoilLabData <- function( park=c('all', 'NERI', 'GARI','BLUE','WV','ALPO','FO
 
   # Soil Chemistry Variables
   slhoriz1 <- subset(slhoriz, Horizon_Collected == TRUE)
+  slhoriz1a <- slhoriz1[!is.na(slhoriz1$pH), ]
+  slhoriz1b <- slhoriz1a %>% mutate (pH = ifelse(pH == "no sample", NA_real_, pH),
+                                     LOI = ifelse(LOI == "no sample", NA_real_, LOI),
+                                     TN = ifelse(TN == "no sample", NA_real_, TN),
+                                     TC = ifelse(TC == "no sample", NA_real_, TC),
+                                     Ca = ifelse(Ca == "no sample", NA_real_, Ca),
+                                     K = ifelse(K == "no sample", NA_real_, K),
+                                     Mg = ifelse(Mg == "no sample", NA_real_, Mg),
+                                     P = ifelse(P == "no sample", NA_real_, P),
+                                     Al = ifelse(Al == "no sample", NA_real_, Al),
+                                     Fe = ifelse(Fe == "no sample", NA_real_, Fe),
+                                     Mn = ifelse(Mn == "no sample", NA_real_, Mn),
+                                     Na = ifelse(Na == "no sample", NA_real_, Na),
+                                     Zn = ifelse(Zn == "no sample", NA_real_, Zn),
+                                     acidity = ifelse(acidity == "no sample", NA_real_, acidity),
+                                     ECEC = ifelse(ECEC == "no sample", NA_real_, ECEC))
 
-  slhoriz2 <- slhoriz1 %>% mutate_at(c('LOI', 'TN', 'TC', 'Ca', 'K', 'Mg', 'P', 'Al',
-                                       'Fe', 'Mn', 'Na', 'Zn', 'acidity','ECEC'), as.factor)
 
-  slhoriz3 <- slhoriz2 %>% mutate_at(c('LOI', 'TN', 'TC', 'Ca', 'K', 'Mg', 'P', 'Al',
+  slhoriz2 <- slhoriz1b %>% mutate_at(c('pH', 'LOI', 'TN', 'TC', 'Ca', 'K', 'Mg', 'P', 'Al',
+                                        'Fe', 'Mn', 'Na', 'Zn', 'acidity','ECEC'), as.factor)
+
+  slhoriz3 <- slhoriz2 %>% mutate_at(c('pH', 'LOI', 'TN', 'TC', 'Ca', 'K', 'Mg', 'P', 'Al',
                                        'Fe', 'Mn', 'Na', 'Zn', 'acidity','ECEC'), as.numeric)
 
   schem1 <- merge(slframe[,c("Event_ID","Soil_Frame_ID","Frame_Number")],slhoriz3, by="Soil_Frame_ID", all.x = T, all.y=T)
