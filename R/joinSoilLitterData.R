@@ -46,7 +46,7 @@
 #' @examples
 #' \dontrun{
 #' importData() #default imports
-#' litter_NERI <- joinLitterData(park = 'NERI', from = 2014, to = 2017)
+#' litter_NERI <- joinLitterData(park = 'NERI', QAQC=FALSE, retired=FALSE, anrevisit=FALSE, years=c(2007:2010))
 #'}
 #' @export
 #'
