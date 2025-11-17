@@ -63,7 +63,7 @@
 # Join soil lab data
 #------------------------
 joinSoilLabData <- function( park=c('all', 'NERI', 'GARI','BLUE','WV','ALPO','FONE','FRHI','FONE','FLNI','JOFL','WEPA','DEWA'),
-                             years=2007:2024,QAQC=FALSE, retired=TRUE, anrevisit=FALSE, layer = c("all", "O", "A")){
+                             years=2007:2025,QAQC=FALSE, retired=TRUE, anrevisit=FALSE, layer = c("all", "O", "A")){
 
   # Match args and class
   park <- match.arg(park)
