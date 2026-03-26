@@ -22,6 +22,15 @@
 #' \item{"FLNI"}{Flight 93 NM only}
 #' \item{"DEWA"}{Delaware Water Gap NRA only}}
 #'
+#' @param veg Select data from all plots or specific vegetation domains. Acceptable options are:
+#' \describe{
+#' \item{"all"}{Includes all vegetation domains in the network}
+#' \item{"EarlySucc"}{only early successional plots like old fields, shrublands, etc}
+#' \item{"Mesic"}{only mesic / moist forest plots}
+#' \item{"RipPalus"}{only riparian / riverine, or palustrine / wetland plots}
+#' \item{"Succe"}{only successional forest, typically young or disturbed stands}
+#' \item{"Xeric"}{only xeric / dry forest plots}}
+#'
 #' @param QAQC Allows you to remove or include QAQC events.
 #' \describe{
 #' \item{FALSE}{Default. Only returns visits that are not QAQC visits}
@@ -56,6 +65,7 @@
 # Joins tbl_Locations and tbl_Events tables and filters by park, year, and plot/visit type
 #------------------------
 joinLocEvent<-function(park=c('all', 'NERI', 'GARI','BLUE','WV','ALPO','FONE','FRHI','FONE','FLNI','JOFL','WEPA','DEWA'),
+                       veg=c('all', 'EarlySucc', 'Mesic', 'RipPalus', 'Succe', 'Xeric'),
                        QAQC=FALSE, retired=TRUE, anrevisit=FALSE,
                        years=2007:2025, output='short', ...){
 
@@ -84,12 +94,16 @@ joinLocEvent<-function(park=c('all', 'NERI', 'GARI','BLUE','WV','ALPO','FONE','F
   } else if (anrevisit==TRUE) {(park.ev1)
   } else {stop("anrevisit must be TRUE or FALSE")}
 
-  park.ev4 <- park.ev3 %>% filter(Year %in% years) %>% droplevels()
-  park.ev4$Year <- as.numeric(park.ev4$Year)
+  park.ev4<- if (veg=='all') {(park.ev3)
+  } else if (veg %in% levels(park.ev3$Vegetation_Domain)){filter(park.ev3,Vegetation_Domain==veg)
+  } else {stop("park must be one of the factor levels of Vegetation_Domain")}
 
-  park.plots<- if (output=='short') {park.ev4 %>% select(Location_ID,Event_ID,Unit_Code,
+  park.ev5 <- park.ev4 %>% filter(Year %in% years) %>% droplevels()
+  park.ev5$Year <- as.numeric(park.ev5$Year)
+
+  park.plots<- if (output=='short') {park.ev5 %>% select(Location_ID,Event_ID,Unit_Code,
     Plot_Name, Plot_Number, X_Coord, Y_Coord, Panel, Year, Event_QAQC, Cycle, Vegetation_Domain)
-  } else if (output=='verbose') {park.ev4}
+  } else if (output=='verbose') {park.ev5}
 
   return(data.frame(park.plots))
 } # end of function
