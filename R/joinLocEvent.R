@@ -89,14 +89,15 @@ joinLocEvent<-function(park=c('all', 'NERI', 'GARI','BLUE','WV','ALPO','FONE','F
   } else {stop("park must be one of the factor levels of Unit_Code")}
 
   park.ev1<-merge(loc6,event,by="Location_ID",all.x=T)
+  park.ev2<-park.ev1 %>% mutate(Vegetation_Domain=as.factor(Vegetation_Domain))
 
-  park.ev3<- if (anrevisit==FALSE) {filter(park.ev1, Panel != "X")
-  } else if (anrevisit==TRUE) {(park.ev1)
+  park.ev3<- if (anrevisit==FALSE) {filter(park.ev2, Panel != "X")
+  } else if (anrevisit==TRUE) {(park.ev2)
   } else {stop("anrevisit must be TRUE or FALSE")}
 
   park.ev4<- if (veg=='all') {(park.ev3)
   } else if (veg %in% levels(park.ev3$Vegetation_Domain)){filter(park.ev3,Vegetation_Domain==veg)
-  } else {stop("park must be one of the factor levels of Vegetation_Domain")}
+  } else {stop("veg must be one of the factor levels of Vegetation_Domain")}
 
   park.ev5 <- park.ev4 %>% filter(Year %in% years) %>% droplevels()
   park.ev5$Year <- as.numeric(park.ev5$Year)
