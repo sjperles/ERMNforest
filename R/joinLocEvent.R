@@ -24,7 +24,7 @@
 #'
 #' @param veg Select data from all plots or specific vegetation domains. Acceptable options are:
 #' \describe{
-#' \item{"all"}{Includes all vegetation domains in the network}
+#' \item{"all"}{Default. Includes all vegetation domains in the network}
 #' \item{"EarlySucc"}{only early successional plots like old fields, shrublands, etc}
 #' \item{"Mesic"}{only mesic / moist forest plots}
 #' \item{"RipPalus"}{only riparian / riverine, or palustrine / wetland plots}
@@ -67,7 +67,7 @@
 joinLocEvent<-function(park=c('all', 'NERI', 'GARI','BLUE','WV','ALPO','FONE','FRHI','FONE','FLNI','JOFL','WEPA','DEWA'),
                        veg=c('all', 'EarlySucc', 'Mesic', 'RipPalus', 'Succe', 'Xeric'),
                        QAQC=FALSE, retired=TRUE, anrevisit=FALSE,
-                       years=2007:2025, output='short', ...){
+                       years=2007:2026, output='short', ...){
 
   loc2<-loc %>% mutate(Unit_Code=as.factor(str_sub(Unit_Code,1,4)))
   loc3<-droplevels(loc2[,c("Location_ID","Unit_Code","X_Coord","Y_Coord","Lat_WGS84", "Long_WGS84", "Plot_Number","Status")])

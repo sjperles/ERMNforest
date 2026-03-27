@@ -21,9 +21,9 @@
 #' \item{"FLNI"}{Flight 93 NM only}
 #' \item{"DEWA"}{Delaware Water Gap NRA only}}
 #'
-#'@param veg Select data from all plots or specific vegetation domains. Acceptable options are:
+#' @param veg Select data from all plots or specific vegetation domains. Acceptable options are:
 #' \describe{
-#' \item{"all"}{Includes all vegetation domains in the network}
+#' \item{"all"}{Default. Includes all vegetation domains in the network}
 #' \item{"EarlySucc"}{only early successional plots like old fields, shrublands, etc}
 #' \item{"Mesic"}{only mesic / moist forest plots}
 #' \item{"RipPalus"}{only riparian / riverine, or palustrine / wetland plots}
@@ -90,9 +90,10 @@ joinAddPlotSp<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inv
                        years=2008:2026,QAQC=FALSE, retired=TRUE, anrevisit=FALSE, output, ...){
 
   park <- match.arg(park)
+  veg <- match.arg(veg)
   speciesType<-match.arg(speciesType)
   GrowthForm<-match.arg(GrowthForm)
-  veg <- match.arg(veg)
+
 
   park.plots<-force(joinLocEvent(park = park, veg = veg, years = years, QAQC = QAQC,retired = retired,
                                  anrevisit = anrevisit, output = 'short'))

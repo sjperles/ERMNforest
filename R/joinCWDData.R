@@ -24,7 +24,7 @@
 #'
 #' @param veg Select data from all plots or specific vegetation domains. Acceptable options are:
 #' \describe{
-#' \item{"all"}{Includes all vegetation domains in the network}
+#' \item{"all"}{Default. Includes all vegetation domains in the network}
 #' \item{"EarlySucc"}{only early successional plots like old fields, shrublands, etc}
 #' \item{"Mesic"}{only mesic / moist forest plots}
 #' \item{"RipPalus"}{only riparian / riverine, or palustrine / wetland plots}

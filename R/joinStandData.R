@@ -24,6 +24,15 @@
 #' \item{"FLNI"}{Flight 93 NM only}
 #' \item{"DEWA"}{Delaware Water Gap NRA only}}
 #'
+#' @param veg Select data from all plots or specific vegetation domains. Acceptable options are:
+#' \describe{
+#' \item{"all"}{Default. Includes all vegetation domains in the network}
+#' \item{"EarlySucc"}{only early successional plots like old fields, shrublands, etc}
+#' \item{"Mesic"}{only mesic / moist forest plots}
+#' \item{"RipPalus"}{only riparian / riverine, or palustrine / wetland plots}
+#' \item{"Succe"}{only successional forest, typically young or disturbed stands}
+#' \item{"Xeric"}{only xeric / dry forest plots}}
+#'
 #' @param QAQC Allows you to remove or include QAQC events.
 #' \describe{
 #' \item{FALSE}{Default. Only returns visits that are not QAQC visits}
@@ -56,10 +65,14 @@
 # Join stand table
 #------------------------
 joinStandData<-function(park=c('all', 'NERI', 'GARI','BLUE','WV','ALPO','FONE','FRHI','FONE','FLNI','JOFL','WEPA','DEWA'),
-                        years=2007:2025, QAQC=FALSE,
+                        veg=c('all', 'EarlySucc', 'Mesic', 'RipPalus', 'Succe', 'Xeric'),
+                        years=2007:2026, QAQC=FALSE,
                         retired=TRUE, anrevisit=FALSE, output, ...){
 
-  park.plots<-force(joinLocEvent(park = park, years = years, QAQC = QAQC,retired = retired,
+  park <- match.arg(park)
+  veg <- match.arg(veg)
+
+  park.plots<-force(joinLocEvent(park = park, veg = veg, years = years, QAQC = QAQC,retired = retired,
                                    anrevisit = anrevisit, output = 'short'))
 
   stand2<-stand %>% select(Event_ID, Stand_Structure_ID, Crown_Closure_ID,  Deer_Browse_Line_ID,
