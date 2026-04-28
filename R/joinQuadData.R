@@ -154,7 +154,7 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inva
 
 
   # Create single column for growth form
-  park.herb7 <- park.herb5 %>% mutate (GrowthForm = if_else(Tree == TRUE,"tree",
+  park.herb7 <- park.herb5 %>% mutate (growthform = if_else(Tree == TRUE,"tree",
                                                             if_else(Shrub == TRUE,"shrub",
                                                                     if_else(Herbaceous == TRUE, "herb",
                                                                             if_else(Vine == TRUE, "vine",
@@ -164,7 +164,7 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inva
 
   # Create final file for selecting and summarizing
   park.herb8 <- park.herb7[,c("Event_ID","Location_ID", "Unit_Code","Plot_Number","Panel","Year",
-                          "Plot_Name", "Plant_ID", "QuadratID", "Cover", "Pres", "Latin_name", "Nativity","Invasive","GrowthForm")]
+                          "Plot_Name", "Plant_ID", "QuadratID", "Cover", "Pres", "Latin_name", "Nativity","Invasive","growthform")]
 
 
   # Summarize quadrat data
@@ -175,14 +175,8 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inva
   } else if (speciesType=='all'){(park.herb8)
   }
 
-  park.herb10<-if (GrowthForm=='tree'){filter(park.herb9,GrowthForm=="tree")
-  } else if (GrowthForm=='shrub'){filter(park.herb9,GrowthForm=="shrub")
-  } else if (GrowthForm=='herb'){filter(park.herb9,GrowthForm=="herb")
-  } else if (GrowthForm=='gram'){filter(park.herb9,GrowthForm=="gram")
-  } else if (GrowthForm=='vine'){filter(park.herb9,GrowthForm=="vine")
-  } else if (GrowthForm=='fern'){filter(park.herb9,GrowthForm=="fern")
-  } else if (GrowthForm=='all'){(park.herb9)
-  }
+  park.herb10<- if(any(GrowthForm == "all")){park.herb9
+  } else {filter(park.herb9, growthform %in% GrowthForm)}
 
 
   # Summarizing quadrat data
