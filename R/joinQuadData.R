@@ -194,13 +194,16 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inva
   herb5 <- park.herb10 %>% group_by (Event_ID, QuadratID) %>% summarise(q.tot.cov = sum(Cover),
                                                                       q.sp.rich = sum(Pres)) %>% ungroup()
   # Total quadrat cover and richness in herb5
-
+  herb5$q.freq <- if_else(herb5$q.sp.rich>0,1,0)
 
   herb6 <- herb5 %>% group_by (Event_ID) %>% summarise (sum.q.cov = sum(q.tot.cov),
-                                                        sum.q.rich = sum(q.sp.rich))
+                                                        sum.q.rich = sum(q.sp.rich),
+                                                        sum.q.freq = sum(q.freq))
   herb7 <- merge (herb6, quadsamp4, by="Event_ID", all.y=T)
-  herb7$ave.q.cov = (herb7$sum.q.cov/herb7$Quad_Sp_Sample)
-  herb7$ave.q.rich = (herb7$sum.q.rich/herb7$Quad_Sp_Sample)
+  herb7$ave.q.cov <- (herb7$sum.q.cov/herb7$Quad_Sp_Sample)
+  herb7$ave.q.rich <- (herb7$sum.q.rich/herb7$Quad_Sp_Sample)
+  herb7$plot.q.freq <- (herb7$sum.q.freq/herb7$Quad_Sp_Sample)
+
   # Plot-wide Average quadrat cover and richness
 
   herb8 <- merge(herb7, plot.sp.rich, by="Event_ID", all.x=T)
@@ -208,7 +211,7 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inva
 
   quads.final <- herb8[,c("Location_ID", "Unit_Code", "Plot_Name", "Plot_Number", "X_Coord", "Y_Coord", "Panel",
                           "Year", "Event_ID", "Event_QAQC", "Cycle", "Vegetation_Domain", "Quad_Sp_Sample", "ave.q.cov", "ave.q.rich",
-                          "sum.q.cov", "sum.q.rich", "plot.sp.rich")] %>% arrange(Plot_Name, Year)
+                          "plot.q.rich", "sum.q.cov", "sum.q.rich", "plot.sp.rich")] %>% arrange(Plot_Name, Year)
 
   return(data.frame(quads.final))
 
