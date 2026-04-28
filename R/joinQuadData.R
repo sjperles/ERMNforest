@@ -92,7 +92,8 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inva
   park <- match.arg(park)
   veg <- match.arg(veg)
   speciesType<-match.arg(speciesType)
-  GrowthForm<-match.arg(GrowthForm)
+  GrowthForm<-match.arg(GrowthForm, several.ok = TRUE,
+                        c('all', 'tree', 'shrub', 'herb', 'gram', 'fern', 'vine'))
 
   park.plots<-force(joinLocEvent(park = park, veg = veg, years = years, QAQC = QAQC, retired = retired,
                                  anrevisit = anrevisit, output = 'short'))
