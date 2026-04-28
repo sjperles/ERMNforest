@@ -211,7 +211,7 @@ joinQuadData<-function(speciesType=c('all', 'native', 'exotic', 'unknown', 'inva
 
   quads.final <- herb8[,c("Location_ID", "Unit_Code", "Plot_Name", "Plot_Number", "X_Coord", "Y_Coord", "Panel",
                           "Year", "Event_ID", "Event_QAQC", "Cycle", "Vegetation_Domain", "Quad_Sp_Sample", "ave.q.cov", "ave.q.rich",
-                          "plot.q.rich", "sum.q.cov", "sum.q.rich", "plot.sp.rich")] %>% arrange(Plot_Name, Year)
+                          "plot.q.freq", "sum.q.cov", "sum.q.rich", "plot.sp.rich")] %>% arrange(Plot_Name, Year)
 
   return(data.frame(quads.final))
 
