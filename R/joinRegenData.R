@@ -109,17 +109,20 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic','invasive'), cano
 
   # Prepare the sapling data
   sap1 <- merge(micro,saps, by="Microplot_Characterization_Data_ID", all.x=T)
-  sap2 <- sap1 %>% mutate (pres.sap = ifelse(DBH>0,1,0), BA_cm2 = (((DBH / 2)^2)*3.1415926535))
+  sap2 <- sap1 %>% mutate (pres.sap = ifelse(DBH>0,1,0), BA_cm2 = (((DBH / 2)^2)*3.1415926535),
+                           sapMcW = ifelse(DBH>2.5,0,1))
 
   sap <-sap2 %>% group_by(Event_ID,Plant_ID, Microplot_ID) %>%
-    summarise(sap.stems=sum(pres.sap, na.rm=T),tot.sap.ba.cm2=sum(BA_cm2, na.rm=T))
+    summarise(sap.stems=sum(pres.sap, na.rm=T),
+              tot.sap.ba.cm2=sum(BA_cm2, na.rm=T),
+              sapMcW.stems=sum(sapMcW), na.rm=T)
 
   # Combine seedling and sapling data
   regen1<-merge(seed[,c("Event_ID","Microplot_ID","Plant_ID",
                         "seedht0","seedht1","seedht2","seedht3","seedht4" )],
-                sap[,c("Event_ID","Plant_ID","Microplot_ID","sap.stems","tot.sap.ba.cm2")],
+                sap[,c("Event_ID","Plant_ID","Microplot_ID","sap.stems","tot.sap.ba.cm2","sapMcW.stems")],
                 by=c("Event_ID","Plant_ID", "Microplot_ID"),all.x=T,all.y=T)
-  regen1[,4:10][is.na(regen1[,4:10])]<-0
+  regen1[,4:11][is.na(regen1[,4:11])]<-0
 
   regen2<-merge(park.plots,regen1,by='Event_ID', all.x=T,all.y=F)
 
@@ -160,8 +163,8 @@ joinRegenData<-function(speciesType=c('all', 'native','exotic','invasive'), cano
   regen10 <- regen9 %>% mutate (total = (seedht0+seedht1+seedht2+seedht3+seedht4),
                                 totU15 = (seedht1+seedht2+seedht3+seedht4),
                                 totU30 = (seedht2+seedht3+seedht4),
-                                stock5u = (seedht0+seedht1+(seedht2*2)+(seedht3*20)+(seedht4*50)+(sap.stems*50)),
-                                stock15u = (seedht1+(seedht2*2)+(seedht3*20)+(seedht4*50)+(sap.stems*50)))
+                                stock5u = (seedht0+seedht1+(seedht2*2)+(seedht3*20)+(seedht4*50)+(sapMcW.stems*50)),
+                                stock15u = (seedht1+(seedht2*2)+(seedht3*20)+(seedht4*50)+(sapMcW.stems*50)))
 
   regen11 <- regen10 %>% group_by(Event_ID,Unit_Code,Plot_Name,Cycle,Year) %>% summarise (plot.seedht0 = sum(seedht0),
                                                                                           plot.seedht1 = sum(seedht1),
